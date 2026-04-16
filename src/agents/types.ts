@@ -2,7 +2,9 @@ import type {
   HandoffPlan,
   KnowledgeAnswerPlan,
   KnowledgeCandidate,
+  KnowledgeContext,
   RouteDecision,
+  SharedAgentContext,
   TicketActionPlan,
   TicketState,
 } from "../core/contracts.js";
@@ -16,7 +18,6 @@ import type {
   TicketsPromptInput,
 } from "../section/types.js";
 import type { HandoffUploadResult, HandoffTools } from "../tools/handoff-tools.js";
-import type { KnowledgeTools } from "../tools/knowledge-tools.js";
 import type { TicketOperationResult, TicketTools } from "../tools/ticket-tools.js";
 
 export interface ServiceAgentDeps {
@@ -49,12 +50,11 @@ export interface ServiceAgentResult {
 export interface KnowledgeAgentDeps {
   sectionBuilder: SectionBuilder;
   llmClient: LlmClient;
-  knowledgeTools: KnowledgeTools;
 }
 
 export interface KnowledgeAgentInput extends KnowledgePromptInput {
-  searchQuery?: string;
-  searchLimit?: number;
+  routeDecision?: RouteDecision;
+  sharedContext?: SharedAgentContext;
 }
 
 export interface KnowledgeAgentRunParams {
@@ -77,7 +77,7 @@ export interface KnowledgeAgentResult {
   plan: KnowledgeAnswerPlan;
   promptBundle: PromptBundle;
   rawOutput: string;
-  retrievedCandidates: KnowledgeCandidate[];
+  usedKnowledgeContext: KnowledgeContext | null;
 }
 
 export interface TicketsAgentDeps {
@@ -88,6 +88,8 @@ export interface TicketsAgentDeps {
 
 export interface TicketsAgentInput extends TicketsPromptInput {
   preferredTicketId?: string;
+  routeDecision?: RouteDecision;
+  sharedContext?: SharedAgentContext;
 }
 
 export interface TicketsAgentRunParams {
@@ -122,6 +124,8 @@ export interface HandoffAgentDeps {
 
 export interface HandoffAgentInput extends HandoffPromptInput {
   escalationTag?: string;
+  routeDecision?: RouteDecision;
+  sharedContext?: SharedAgentContext;
 }
 
 export interface HandoffAgentRunParams {

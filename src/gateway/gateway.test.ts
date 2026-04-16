@@ -62,7 +62,6 @@ describe("Gateway", () => {
               result: {
                 plan: {
                   shouldAnswerDirectly: true,
-                  suggestedSearchQuery: "退款时效",
                   answerDraft: "退款通常会在 1 到 3 个工作日内完成。",
                   citedKnowledgeIds: ["kb-refund-01"],
                 },
@@ -78,7 +77,7 @@ describe("Gateway", () => {
                   },
                 },
                 rawOutput: "{}",
-                retrievedCandidates: knowledgeScenario.knowledgeCandidates,
+                usedKnowledgeContext: knowledgeScenario.knowledgeContext ?? null,
               },
             },
           };
@@ -152,6 +151,7 @@ describe("Gateway", () => {
                   queueId: "queue-1",
                   acceptedAt: "2026-03-08T13:00:00Z",
                   urgency: "urgent",
+                  consoleView: "=== Human Handoff View ===",
                 },
               },
             },
@@ -204,7 +204,7 @@ describe("Gateway", () => {
     const handoffInput = buildHandoffInput(session, gatewayConfig, candidates);
 
     expect(routeInput.session.sessionId).toBe(session.sessionId);
-    expect(knowledgeInput.toolSummaries?.[0]?.name).toBe("knowledgeSearch");
+    expect(knowledgeInput.knowledgeContext?.entries[0]?.id).toBe("kb-refund-01");
     expect(ticketsInput.toolSummaries?.[0]?.name).toBe("ticketsQuery");
     expect(handoffInput.toolSummaries?.[0]?.name).toBe("handoffUpload");
   });

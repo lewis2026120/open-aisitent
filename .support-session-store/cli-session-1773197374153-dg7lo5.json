@@ -1,0 +1,41 @@
+{
+  "sessionId": "cli-session-1773197374153-dg7lo5",
+  "customerId": "cust-cli-001",
+  "channel": "terminal",
+  "senderId": "cli-user-001",
+  "senderName": "CLI User",
+  "transcript": [
+    {
+      "id": "msg-1773197377720-1",
+      "role": "user",
+      "text": "今天我的订单处理的如何",
+      "createdAt": "2026-03-11T02:49:37.718Z"
+    },
+    {
+      "id": "assistant-1773197398955",
+      "role": "assistant",
+      "text": "我可以帮你查询订单或工单的处理进度，但当前还缺少可定位的记录。请提供订单号、工单号，或更具体的下单信息。",
+      "createdAt": "2026-03-11T02:49:58.954Z"
+    }
+  ],
+  "sharedContext": {
+    "channelCapabilities": {
+      "channel": "terminal",
+      "supportsAttachments": true,
+      "supportsRealtimeHandoff": true,
+      "supportsRichText": true,
+      "supportsButtons": false
+    },
+    "customerProfile": {
+      "customerId": "cust-cli-001"
+    },
+    "operational": {
+      "handoffEnabled": true,
+      "ticketingEnabled": true,
+      "knowledgeEnabled": true
+    }
+  },
+  "createdAt": "2026-03-11T02:49:37.718Z",
+  "updatedAt": "2026-03-11T02:49:58.954Z",
+  "ticketState": null
+}

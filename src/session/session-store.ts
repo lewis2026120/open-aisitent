@@ -31,6 +31,9 @@ export class FileSessionStore implements SessionStore {
     if (input.ticketState !== undefined) {
       record.ticketState = input.ticketState;
     }
+    if (input.sharedContext !== undefined) {
+      record.sharedContext = input.sharedContext;
+    }
 
     upsertTurn(record.transcript, {
       id: input.messageId,
@@ -134,6 +137,7 @@ function createRecord(params: {
     senderName: params.input.senderName,
     transcript: params.history,
     ticketState: params.input.ticketState,
+    sharedContext: params.input.sharedContext,
     createdAt: params.input.timestamp,
     updatedAt: params.input.timestamp,
   };
@@ -152,6 +156,7 @@ function toSessionSnapshot(record: SessionRecord): SessionSnapshot {
         ? record.transcript.filter((_, index) => index !== latestUserIndex)
         : [...record.transcript],
     ticketState: record.ticketState,
+    sharedContext: record.sharedContext,
   };
 }
 

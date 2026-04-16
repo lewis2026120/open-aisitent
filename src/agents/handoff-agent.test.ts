@@ -32,6 +32,7 @@ describe("HandoffToHumanAgent", () => {
 
     expect(result.plan.urgency).toBe("urgent");
     expect(result.uploadResult.queueId).toBe("handoff-001");
+    expect(result.uploadResult.consoleView).toContain("Human Handoff View");
     expect(uploadedSummary).toContain("人工");
     expect(result.promptBundle.variant).toBe("handoff");
   });

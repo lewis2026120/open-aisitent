@@ -1,4 +1,9 @@
-import type { ConversationTurn, SessionSnapshot, TicketState } from "../core/contracts.js";
+import type {
+  ConversationTurn,
+  SessionSnapshot,
+  SharedAgentContext,
+  TicketState,
+} from "../core/contracts.js";
 
 export interface SessionStoreHistoryMessage {
   messageId: string;
@@ -18,6 +23,7 @@ export interface SessionStoreBusinessMessage {
   timestamp: string;
   history?: SessionStoreHistoryMessage[];
   ticketState?: TicketState | null;
+  sharedContext?: SharedAgentContext;
 }
 
 export interface SessionAssistantReply {
@@ -35,6 +41,7 @@ export interface SessionRecord {
   senderName?: string;
   transcript: ConversationTurn[];
   ticketState?: TicketState | null;
+  sharedContext?: SharedAgentContext;
   createdAt: string;
   updatedAt: string;
 }

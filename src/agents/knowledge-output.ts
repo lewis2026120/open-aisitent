@@ -20,15 +20,15 @@ export function parseKnowledgeAnswerPlan(rawOutput: string): KnowledgeAnswerPlan
       "shouldAnswerDirectly",
       normalizedRawOutput,
     ),
-    suggestedSearchQuery: parseRequiredString(
-      parsed.suggestedSearchQuery,
-      "suggestedSearchQuery",
-      normalizedRawOutput,
-    ),
     answerDraft: parseRequiredString(parsed.answerDraft, "answerDraft", normalizedRawOutput),
     citedKnowledgeIds: parseStringArray(
       parsed.citedKnowledgeIds,
       "citedKnowledgeIds",
+      normalizedRawOutput,
+    ),
+    missingKnowledge: parseOptionalString(
+      parsed.missingKnowledge,
+      "missingKnowledge",
       normalizedRawOutput,
     ),
   };
@@ -80,6 +80,23 @@ function parseRequiredBoolean(value: unknown, fieldName: string, rawOutput: stri
   }
 
   return value;
+}
+
+function parseOptionalString(
+  value: unknown,
+  fieldName: string,
+  rawOutput: string,
+): string | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (typeof value !== "string") {
+    throw new KnowledgeOutputParseError(`${fieldName} must be a string when provided.`, rawOutput);
+  }
+
+  const trimmed = value.trim();
+  return trimmed.length === 0 ? undefined : trimmed;
 }
 
 function parseStringArray(value: unknown, fieldName: string, rawOutput: string): string[] {

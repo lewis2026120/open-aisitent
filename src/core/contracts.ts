@@ -4,6 +4,57 @@ export type TicketStatus = "none" | "open" | "pending" | "resolved" | "closed";
 
 export type TicketPriority = "low" | "medium" | "high";
 
+export type CustomerTier = "standard" | "vip" | "enterprise";
+
+export type RiskLevel = "low" | "medium" | "high";
+
+export interface CustomerProfile {
+  customerId: string;
+  tier?: CustomerTier;
+  locale?: string;
+  product?: string;
+  tags?: string[];
+  riskLevel?: RiskLevel;
+}
+
+export interface BusinessPolicyContext {
+  prioritizeHandoffIntents?: string[];
+  prioritizeTicketIntents?: string[];
+  highRiskTags?: string[];
+  preferKnowledgeForHowTo?: boolean;
+  notes?: string[];
+}
+
+export interface ChannelCapabilityContext {
+  channel: string;
+  supportsAttachments: boolean;
+  supportsRealtimeHandoff: boolean;
+  supportsRichText: boolean;
+  supportsButtons: boolean;
+}
+
+export interface OperationalContext {
+  handoffEnabled: boolean;
+  ticketingEnabled: boolean;
+  knowledgeEnabled: boolean;
+  businessHours?: string;
+  nowInBusinessHours?: boolean;
+}
+
+export interface ConversationSummary {
+  summary: string;
+  openIssues: string[];
+  lastResolvedIssue?: string;
+}
+
+export interface SharedAgentContext {
+  businessPolicy?: BusinessPolicyContext;
+  channelCapabilities?: ChannelCapabilityContext;
+  customerProfile?: CustomerProfile;
+  operational?: OperationalContext;
+  conversationSummary?: ConversationSummary;
+}
+
 export interface ConversationTurn {
   id: string;
   role: "user" | "assistant";
@@ -25,6 +76,19 @@ export interface KnowledgeCandidate {
   snippet: string;
   source?: string;
   score?: number;
+}
+
+export interface KnowledgeContextEntry {
+  id: string;
+  title: string;
+  content: string;
+  source?: string;
+  relevanceScore?: number;
+}
+
+export interface KnowledgeContext {
+  summary: string;
+  entries: KnowledgeContextEntry[];
 }
 
 export interface ClassificationExample {
@@ -51,6 +115,7 @@ export interface SessionSnapshot {
   latestUserMessage: string;
   history: ConversationTurn[];
   ticketState?: TicketState | null;
+  sharedContext?: SharedAgentContext;
 }
 
 export interface RouteDecision {
@@ -63,9 +128,9 @@ export interface RouteDecision {
 
 export interface KnowledgeAnswerPlan {
   shouldAnswerDirectly: boolean;
-  suggestedSearchQuery: string;
   answerDraft: string;
   citedKnowledgeIds: string[];
+  missingKnowledge?: string;
 }
 
 export interface TicketActionPlan {

@@ -43,17 +43,20 @@ function createRouteResult(route: ServiceAgentResult["decision"]["route"]): Serv
 describe("SupportOrchestrator", () => {
   it("dispatches to KnowledgeAgent when route is knowledge", async () => {
     let knowledgeCalls = 0;
+    let capturedRoute: string | undefined;
+    let capturedSharedContext = routeScenario.session.sharedContext;
     const orchestrator = createSupportOrchestrator({
       serviceAgent: {
         run: async () => createRouteResult("knowledge"),
       },
       knowledgeAgent: {
-        run: async (_input: KnowledgeAgentInput): Promise<KnowledgeAgentResult> => {
+        run: async (input: KnowledgeAgentInput): Promise<KnowledgeAgentResult> => {
+          capturedRoute = input.routeDecision?.route;
+          capturedSharedContext = input.sharedContext;
           knowledgeCalls += 1;
           return {
             plan: {
               shouldAnswerDirectly: true,
-              suggestedSearchQuery: "退款时效",
               answerDraft: "退款通常会在 1 到 3 个工作日内完成。",
               citedKnowledgeIds: ["kb-refund-01"],
             },
@@ -69,7 +72,7 @@ describe("SupportOrchestrator", () => {
               },
             },
             rawOutput: "{}",
-            retrievedCandidates: knowledgeScenario.knowledgeCandidates,
+            usedKnowledgeContext: knowledgeScenario.knowledgeContext ?? null,
           };
         },
       },
@@ -96,10 +99,14 @@ describe("SupportOrchestrator", () => {
     expect(result.downstream.route).toBe("knowledge");
     expect(result.downstream.finalReply).toContain("1 到 3");
     expect(knowledgeCalls).toBe(1);
+    expect(capturedRoute).toBe("knowledge");
+    expect(capturedSharedContext).toEqual(routeScenario.session.sharedContext);
   });
 
   it("dispatches to TicketsAgent when route is tickets", async () => {
     let ticketsCalls = 0;
+    let capturedRoute: string | undefined;
+    let capturedSharedContext = routeScenario.session.sharedContext;
     const orchestrator = createSupportOrchestrator({
       serviceAgent: {
         run: async () => createRouteResult("tickets"),
@@ -110,7 +117,9 @@ describe("SupportOrchestrator", () => {
         },
       },
       ticketsAgent: {
-        run: async (_input: TicketsAgentInput): Promise<TicketsAgentResult> => {
+        run: async (input: TicketsAgentInput): Promise<TicketsAgentResult> => {
+          capturedRoute = input.routeDecision?.route;
+          capturedSharedContext = input.sharedContext;
           ticketsCalls += 1;
           return {
             plan: {
@@ -155,12 +164,73 @@ describe("SupportOrchestrator", () => {
 
     expect(result.route).toBe("tickets");
     expect(result.downstream.route).toBe("tickets");
-    expect(result.downstream.finalReply).toContain("查询工单");
+    expect(result.downstream.finalReply).toContain("TK-20260307-01");
+    expect(result.downstream.finalReply).toContain("处理中");
     expect(ticketsCalls).toBe(1);
+    expect(capturedRoute).toBe("tickets");
+    expect(capturedSharedContext).toEqual(routeScenario.session.sharedContext);
+  });
+
+  it("asks for more context when the tickets path cannot locate any record", async () => {
+    const orchestrator = createSupportOrchestrator({
+      serviceAgent: {
+        run: async () => createRouteResult("tickets"),
+      },
+      knowledgeAgent: {
+        run: async (_input: KnowledgeAgentInput): Promise<KnowledgeAgentResult> => {
+          throw new Error("knowledge agent should not be called");
+        },
+      },
+      ticketsAgent: {
+        run: async (_input: TicketsAgentInput): Promise<TicketsAgentResult> => ({
+          plan: {
+            action: "query",
+            reason: "query existing ticket",
+            ticketFields: {},
+            userReplyDraft: "我正在为你查询工单进度。",
+          },
+          promptBundle: {
+            variant: "tickets",
+            sections: [],
+            systemPrompt: "prompt",
+            metadata: {
+              sessionId: ticketsScenario.session.sessionId,
+              historyCount: ticketsScenario.session.history.length,
+              hasTicketState: false,
+              knowledgeCandidateCount: ticketsScenario.knowledgeCandidates?.length ?? 0,
+            },
+          },
+          rawOutput: "{}",
+          latestTicketState: null,
+          toolResult: {
+            action: "query",
+            ticketState: null,
+          },
+        }),
+      },
+      handoffAgent: {
+        run: async (_input: HandoffAgentInput): Promise<HandoffAgentResult> => {
+          throw new Error("handoff agent should not be called");
+        },
+      },
+    });
+
+    const result = await orchestrator.run({
+      routeInput: routeScenario,
+      knowledgeInput: knowledgeScenario,
+      ticketsInput: ticketsScenario,
+      handoffInput: handoffScenario,
+    });
+
+    expect(result.downstream.route).toBe("tickets");
+    expect(result.downstream.finalReply).toContain("订单号");
+    expect(result.downstream.finalReply).toContain("工单号");
   });
 
   it("dispatches to HandoffToHumanAgent when route is handoff", async () => {
     let handoffCalls = 0;
+    let capturedRoute: string | undefined;
+    let capturedSharedContext = routeScenario.session.sharedContext;
     const orchestrator = createSupportOrchestrator({
       serviceAgent: {
         run: async () => createRouteResult("handoff"),
@@ -176,7 +246,9 @@ describe("SupportOrchestrator", () => {
         },
       },
       handoffAgent: {
-        run: async (_input: HandoffAgentInput): Promise<HandoffAgentResult> => {
+        run: async (input: HandoffAgentInput): Promise<HandoffAgentResult> => {
+          capturedRoute = input.routeDecision?.route;
+          capturedSharedContext = input.sharedContext;
           handoffCalls += 1;
           return {
             plan: {
@@ -202,6 +274,7 @@ describe("SupportOrchestrator", () => {
               queueId: "queue-001",
               acceptedAt: "2026-03-08T13:00:00Z",
               urgency: "urgent",
+              consoleView: "=== Human Handoff View ===",
             },
           };
         },
@@ -219,6 +292,8 @@ describe("SupportOrchestrator", () => {
     expect(result.downstream.route).toBe("handoff");
     expect(result.downstream.finalReply).toContain("人工处理");
     expect(handoffCalls).toBe(1);
+    expect(capturedRoute).toBe("handoff");
+    expect(capturedSharedContext).toEqual(routeScenario.session.sharedContext);
   });
 
   it("fails when session ids do not match", async () => {

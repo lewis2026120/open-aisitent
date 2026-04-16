@@ -4,6 +4,7 @@ import {
   buildHistorySection,
   buildKnowledgeCandidatesSection,
   buildOutputContractSection,
+  buildSharedContextSection,
   buildTaskGoalSection,
   buildTextSection,
   buildTicketStateSection,
@@ -25,6 +26,7 @@ export function buildRouteSections(input: RoutePromptInput): PromptSection[] {
     buildCurrentMessageSection(input.session.latestUserMessage),
     buildClassificationExamplesSection(input.classificationExamples),
     buildHistorySection(input.session.history),
+    buildSharedContextSection(input.sharedContext ?? input.session.sharedContext),
     buildTicketStateSection(input.session.ticketState),
     buildKnowledgeCandidatesSection(input.knowledgeCandidates),
     buildOutputContractSection([

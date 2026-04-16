@@ -14,12 +14,17 @@ export async function runHandoffAgent(
   const uploadResult = await params.deps.handoffTools.handoffUpload({
     customerId: params.input.session.customerId,
     sessionId: params.input.session.sessionId,
+    latestUserMessage: params.input.session.latestUserMessage,
     summaryForHuman: attemptResult.plan.summaryForHuman,
     handoffReason: attemptResult.plan.handoffReason,
     urgency: attemptResult.plan.urgency,
     attachmentPayload: attemptResult.plan.attachmentPayload,
     ticketState: params.input.session.ticketState,
     escalationTag: params.input.escalationTag,
+    history: params.input.session.history,
+    sharedContext: params.input.sharedContext ?? params.input.session.sharedContext,
+    routeDecision: params.input.routeDecision,
+    knowledgeCandidates: params.input.knowledgeCandidates,
   });
 
   return {

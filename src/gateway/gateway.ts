@@ -1,5 +1,11 @@
 import type { HandoffAgentInput, KnowledgeAgentInput, TicketsAgentInput } from "../agents/types.js";
-import type { KnowledgeCandidate, SessionSnapshot } from "../core/contracts.js";
+import type {
+  KnowledgeCandidate,
+  KnowledgeContext,
+  SessionSnapshot,
+  SharedAgentContext,
+} from "../core/contracts.js";
+import { createDefaultKnowledgeContextLoader } from "../context/knowledge-context-loader.js";
 import type { RoutePromptInput } from "../section/types.js";
 import type { SessionStore } from "../session/types.js";
 import type {
@@ -26,8 +32,18 @@ export class Gateway {
     validateGatewayRequest(request);
 
     const sharedCandidates = resolveKnowledgeCandidates(request, this.config);
+    const sharedKnowledgeContext = resolveKnowledgeContext(
+      request,
+      this.config,
+      sharedCandidates,
+    );
     const routeInput = buildRouteInput(request.session, this.config, sharedCandidates);
-    const knowledgeInput = buildKnowledgeInput(request.session, this.config, sharedCandidates);
+    const knowledgeInput = buildKnowledgeInput(
+      request.session,
+      this.config,
+      sharedCandidates,
+      sharedKnowledgeContext,
+    );
     const ticketsInput = buildTicketsInput(request.session, this.config, sharedCandidates);
     const handoffInput = buildHandoffInput(request.session, this.config, sharedCandidates);
 
@@ -52,10 +68,15 @@ export class Gateway {
       throw new Error("Gateway handleBusinessMessage() requires a SessionStore.");
     }
 
-    const session = await this.sessionStore.recordBusinessMessage(request);
+    const sharedContext = buildSharedAgentContext(request);
+    const session = await this.sessionStore.recordBusinessMessage({
+      ...request,
+      sharedContext,
+    });
     const result = await this.handleMessage({
       session,
       knowledgeCandidates: request.knowledgeCandidates,
+      knowledgeContext: request.knowledgeContext,
     });
 
     if (result.orchestratorResult.downstream.route === "tickets") {
@@ -89,6 +110,7 @@ export function buildRouteInput(
 ): RoutePromptInput {
   return {
     session,
+    sharedContext: session.sharedContext,
     taskGoal: config.routeGoal,
     classificationExamples: config.routeExamples,
     knowledgeCandidates,
@@ -99,11 +121,22 @@ export function buildKnowledgeInput(
   session: SessionSnapshot,
   config: GatewayConfig,
   knowledgeCandidates: KnowledgeCandidate[],
+  knowledgeContext?: KnowledgeContext | null,
 ): KnowledgeAgentInput {
+  const resolvedKnowledgeContext =
+    knowledgeContext ??
+    (config.knowledgeContextLoader ?? createDefaultKnowledgeContextLoader()).load({
+      session,
+      knowledgeCandidates,
+      sharedContext: session.sharedContext,
+    });
+
   return {
     session,
+    sharedContext: session.sharedContext,
     taskGoal: config.knowledgeGoal,
     knowledgeCandidates,
+    knowledgeContext: resolvedKnowledgeContext ?? undefined,
     toolSummaries: config.knowledgeTools,
   };
 }
@@ -115,6 +148,7 @@ export function buildTicketsInput(
 ): TicketsAgentInput {
   return {
     session,
+    sharedContext: session.sharedContext,
     taskGoal: config.ticketsGoal,
     knowledgeCandidates,
     toolSummaries: config.ticketTools,
@@ -128,9 +162,42 @@ export function buildHandoffInput(
 ): HandoffAgentInput {
   return {
     session,
+    sharedContext: session.sharedContext,
     taskGoal: config.handoffGoal,
     knowledgeCandidates,
     toolSummaries: config.handoffTools,
+  };
+}
+
+function buildSharedAgentContext(request: GatewayBusinessMessageRequest): SharedAgentContext {
+  return {
+    businessPolicy: request.businessPolicyContext,
+    channelCapabilities:
+      request.channelCapabilityContext ??
+      buildDefaultChannelCapabilities(request.channel),
+    customerProfile:
+      request.customerProfile ??
+      {
+        customerId: request.customerId,
+      },
+    operational:
+      request.operationalContext ??
+      {
+        handoffEnabled: true,
+        ticketingEnabled: true,
+        knowledgeEnabled: true,
+      },
+    conversationSummary: request.conversationSummary,
+  };
+}
+
+function buildDefaultChannelCapabilities(channel: string) {
+  return {
+    channel,
+    supportsAttachments: true,
+    supportsRealtimeHandoff: true,
+    supportsRichText: true,
+    supportsButtons: false,
   };
 }
 
@@ -139,6 +206,23 @@ function resolveKnowledgeCandidates(
   config: GatewayConfig,
 ): KnowledgeCandidate[] {
   return request.knowledgeCandidates ?? config.knowledgeCandidates ?? [];
+}
+
+function resolveKnowledgeContext(
+  request: GatewayMessageRequest,
+  config: GatewayConfig,
+  knowledgeCandidates: KnowledgeCandidate[],
+): KnowledgeContext | null {
+  if (request.knowledgeContext) {
+    return request.knowledgeContext;
+  }
+
+  const loader = config.knowledgeContextLoader ?? createDefaultKnowledgeContextLoader();
+  return loader.load({
+    session: request.session,
+    knowledgeCandidates,
+    sharedContext: request.session.sharedContext,
+  });
 }
 
 function validateGatewayRequest(request: GatewayMessageRequest): void {

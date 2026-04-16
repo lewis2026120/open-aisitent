@@ -21,12 +21,14 @@ describe("DefaultSectionBuilder", () => {
     expect(result.systemPrompt).toContain("Current Customer Message");
   });
 
-  it("builds a knowledge prompt with tool summary and knowledge ids", () => {
+  it("builds a knowledge prompt with prepared context and knowledge ids", () => {
     const result = builder.buildKnowledgePrompt(knowledgeScenario);
 
     expect(result.variant).toBe("knowledge");
-    expect(result.systemPrompt).toContain("Knowledge Candidates");
-    expect(result.systemPrompt).toContain("knowledgeSearch");
+    expect(result.systemPrompt).toContain("Shared Business Context");
+    expect(result.systemPrompt).toContain("Service Route Decision");
+    expect(result.systemPrompt).toContain("Prepared Knowledge Context");
+    expect(result.systemPrompt).toContain("missingKnowledge");
     expect(result.systemPrompt).toContain("citedKnowledgeIds");
   });
 
@@ -34,6 +36,8 @@ describe("DefaultSectionBuilder", () => {
     const result = builder.buildTicketsPrompt(ticketsScenario);
 
     expect(result.variant).toBe("tickets");
+    expect(result.systemPrompt).toContain("Shared Business Context");
+    expect(result.systemPrompt).toContain("Service Route Decision");
     expect(result.systemPrompt).toContain("Current Ticket State");
     expect(result.systemPrompt).toContain("ticketsCreate");
     expect(result.systemPrompt).toContain('"action": "query|create|update"');
@@ -43,6 +47,8 @@ describe("DefaultSectionBuilder", () => {
     const result = builder.buildHandoffPrompt(handoffScenario);
 
     expect(result.variant).toBe("handoff");
+    expect(result.systemPrompt).toContain("Shared Business Context");
+    expect(result.systemPrompt).toContain("Service Route Decision");
     expect(result.systemPrompt).toContain("handoffUpload");
     expect(result.systemPrompt).toContain('"urgency": "normal|urgent"');
     expect(result.systemPrompt).toContain("summaryForHuman");

@@ -1,10 +1,12 @@
 import type {
   ClassificationExample,
   KnowledgeCandidate,
+  RouteDecision,
   SessionSnapshot,
   TaskGoal,
   ToolSummary,
 } from "../core/contracts.js";
+import { loadKnowledgeContext } from "../context/knowledge-context-loader.js";
 import type {
   HandoffPromptInput,
   KnowledgePromptInput,
@@ -36,6 +38,52 @@ const demoSession: SessionSnapshot = {
     priority: "high",
     summary: "用户反馈退款迟迟未到账。",
     lastUpdateAt: "2026-03-07T12:00:00Z",
+  },
+  sharedContext: {
+    customerProfile: {
+      customerId: "cust-9001",
+      tier: "vip",
+      locale: "zh-CN",
+      product: "refund-service",
+      tags: ["vip", "refund-risk"],
+      riskLevel: "medium",
+    },
+    channelCapabilities: {
+      channel: "whatsapp",
+      supportsAttachments: true,
+      supportsRealtimeHandoff: true,
+      supportsRichText: true,
+      supportsButtons: false,
+    },
+    businessPolicy: {
+      prioritizeHandoffIntents: ["escalate_to_human"],
+      prioritizeTicketIntents: ["check_ticket_progress"],
+      preferKnowledgeForHowTo: true,
+      notes: ["退款争议优先查单", "高风险标签时可直接建议转人工"],
+    },
+    operational: {
+      handoffEnabled: true,
+      ticketingEnabled: true,
+      knowledgeEnabled: true,
+      businessHours: "09:00-21:00 Asia/Shanghai",
+      nowInBusinessHours: true,
+    },
+    conversationSummary: {
+      summary: "用户连续两天反馈退款未到账，情绪上升。",
+      openIssues: ["退款工单处理慢", "用户希望明确完成时间"],
+      lastResolvedIssue: "首次身份校验问题",
+    },
+  },
+};
+
+const defaultRouteDecision: RouteDecision = {
+  route: "tickets",
+  intent: "check_ticket_progress",
+  confidence: 0.94,
+  reason: "用户优先要求查询工单进度。",
+  entities: {
+    ticketId: "TK-20260307-01",
+    channel: "whatsapp",
   },
 };
 
@@ -77,13 +125,6 @@ const routeExamples: ClassificationExample[] = [
   },
 ];
 
-const knowledgeTools: ToolSummary[] = [
-  {
-    name: "knowledgeSearch",
-    description: "Search the knowledge base for support answers.",
-  },
-];
-
 const ticketTools: ToolSummary[] = [
   {
     name: "ticketsQuery",
@@ -102,7 +143,7 @@ const ticketTools: ToolSummary[] = [
 const handoffTools: ToolSummary[] = [
   {
     name: "handoffUpload",
-    description: "Upload an escalation package to the human support queue.",
+    description: "Generate a readable escalation package for the human support queue.",
   },
 ];
 
@@ -152,13 +193,22 @@ export const routeScenario: RoutePromptInput = {
 
 export const knowledgeScenario: KnowledgePromptInput = {
   session: demoSession,
+  routeDecision: defaultRouteDecision,
+  sharedContext: demoSession.sharedContext,
   taskGoal: knowledgeGoal,
   knowledgeCandidates: commonKnowledgeCandidates,
-  toolSummaries: knowledgeTools,
+  knowledgeContext: loadKnowledgeContext({
+    session: demoSession,
+    knowledgeCandidates: commonKnowledgeCandidates,
+    routeDecision: defaultRouteDecision,
+    sharedContext: demoSession.sharedContext,
+  }) ?? undefined,
 };
 
 export const ticketsScenario: TicketsPromptInput = {
   session: demoSession,
+  routeDecision: defaultRouteDecision,
+  sharedContext: demoSession.sharedContext,
   taskGoal: ticketsGoal,
   knowledgeCandidates: commonKnowledgeCandidates,
   toolSummaries: ticketTools,
@@ -166,6 +216,13 @@ export const ticketsScenario: TicketsPromptInput = {
 
 export const handoffScenario: HandoffPromptInput = {
   session: demoSession,
+  routeDecision: {
+    ...defaultRouteDecision,
+    route: "handoff",
+    intent: "escalate_to_human",
+    reason: "用户明确表达需要人工接入。",
+  },
+  sharedContext: demoSession.sharedContext,
   taskGoal: handoffGoal,
   knowledgeCandidates: commonKnowledgeCandidates,
   toolSummaries: handoffTools,
@@ -174,7 +231,7 @@ export const handoffScenario: HandoffPromptInput = {
 export const sectionSelfCheckList = [
   "Route prompt contains classification examples.",
   "All prompts contain the latest user message.",
-  "Knowledge prompt contains knowledge candidates and knowledgeSearch.",
+  "Knowledge prompt contains prepared knowledge context.",
   "Tickets prompt contains ticket state and ticket tools.",
   "Handoff prompt contains escalation output schema and handoffUpload.",
 ];

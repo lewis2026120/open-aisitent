@@ -1,11 +1,18 @@
 import type {
+  BusinessPolicyContext,
+  ChannelCapabilityContext,
   ClassificationExample,
+  ConversationSummary,
+  CustomerProfile,
   KnowledgeCandidate,
+  KnowledgeContext,
+  OperationalContext,
   SessionSnapshot,
   TaskGoal,
   TicketState,
   ToolSummary,
 } from "../core/contracts.js";
+import type { KnowledgeContextLoader } from "../context/knowledge-context-loader.js";
 import type { SupportOrchestratorResult } from "../orchestration/types.js";
 import type { SessionStore } from "../session/types.js";
 
@@ -19,11 +26,13 @@ export interface GatewayConfig {
   ticketTools: ToolSummary[];
   handoffTools: ToolSummary[];
   knowledgeCandidates?: KnowledgeCandidate[];
+  knowledgeContextLoader?: KnowledgeContextLoader;
 }
 
 export interface GatewayMessageRequest {
   session: SessionSnapshot;
   knowledgeCandidates?: KnowledgeCandidate[];
+  knowledgeContext?: KnowledgeContext;
 }
 
 export interface GatewayHistoryMessage {
@@ -45,6 +54,12 @@ export interface GatewayBusinessMessageRequest {
   history?: GatewayHistoryMessage[];
   ticketState?: TicketState | null;
   knowledgeCandidates?: KnowledgeCandidate[];
+  knowledgeContext?: KnowledgeContext;
+  businessPolicyContext?: BusinessPolicyContext;
+  channelCapabilityContext?: ChannelCapabilityContext;
+  customerProfile?: CustomerProfile;
+  operationalContext?: OperationalContext;
+  conversationSummary?: ConversationSummary;
 }
 
 export interface GatewayBusinessRequestAdapterResult {

@@ -2,7 +2,12 @@
 import readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
 import type { AgentRoute } from "../core/contracts.js";
-import { createGatewayChatRuntime } from "./gateway-chat-runtime.js";
+import { parseChatControlAction } from "./chat-control.js";
+import {
+  createGatewayChatRuntime,
+  type GatewayChatRuntime,
+  type GatewayChatSessionInfo,
+} from "./gateway-chat-runtime.js";
 import { loadDotEnv } from "./load-dotenv.js";
 
 loadDotEnv();
@@ -50,27 +55,38 @@ async function main(): Promise<void> {
     }
   } finally {
     rl.close();
+    runtime.close();
   }
 }
 
 async function processChatLine(
-  runtime: ReturnType<typeof createGatewayChatRuntime>,
+  runtime: GatewayChatRuntime,
   rawInput: string,
 ): Promise<boolean> {
-  const message = rawInput.trim();
+  const action = parseChatControlAction(rawInput);
 
-  if (!message) {
+  if (action.type === "ignore") {
     return false;
   }
 
-  if (message.toLowerCase() === "exit") {
+  if (action.type === "exit") {
     output.write("\nBye.\n");
     return true;
   }
 
+  if (action.type === "new-session") {
+    const nextSession = runtime.openNewSession();
+    printNewSessionOpened(nextSession);
+    return false;
+  }
+
   try {
-    const result = await runtime.sendMessage(message);
+    const result = await runtime.sendMessage(action.text);
     output.write(`\nAssistant> ${result.reply}\n`);
+
+    if (result.trace.downstreamRoute === "handoff" && result.trace.handoffToolResult?.consoleView) {
+      output.write(`\nHandoff View>\n${result.trace.handoffToolResult.consoleView}\n`);
+    }
   } catch (error) {
     const text = error instanceof Error ? error.message : String(error);
     output.write(`\nError> ${text}\n`);
@@ -79,12 +95,19 @@ async function processChatLine(
   return false;
 }
 
-function printWelcome(session: ReturnType<ReturnType<typeof createGatewayChatRuntime>["getSessionInfo"]>): void {
+function printWelcome(session: GatewayChatSessionInfo): void {
   output.write("\n=== Gateway Interactive CLI ===\n");
   output.write(`Conversation: ${session.conversationId}\n`);
   output.write(`Channel: ${session.channel}\n`);
   output.write(`Store: ${session.storeDir}\n`);
-  output.write('Type a message and press Enter. Type "exit" to quit.\n');
+  output.write('Type a message and press Enter. Type "/new" for a new context or "exit" to quit.\n');
+}
+
+function printNewSessionOpened(session: GatewayChatSessionInfo): void {
+  output.write("\n=== New Context Opened ===\n");
+  output.write(`Conversation: ${session.conversationId}\n`);
+  output.write(`Channel: ${session.channel}\n`);
+  output.write(`Store: ${session.storeDir}\n`);
 }
 
 function isReadlineClosedError(error: unknown): boolean {

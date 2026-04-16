@@ -8,7 +8,8 @@ describe("Gateway real-like business flow", () => {
     console.log("\\nGateway business flow trace:\n" + JSON.stringify(trace, null, 2));
 
     expect(trace.downstreamRoute).toBe("tickets");
-    expect(trace.downstreamReply).toContain("工单目前还在处理中");
+    expect(trace.downstreamReply).toContain("TK-20260307-01");
+    expect(trace.downstreamReply).toContain("处理中");
     expect(trace.ticketToolResult?.action).toBe("query");
     expect(trace.sessionStore.transcriptCount).toBeGreaterThan(0);
   });

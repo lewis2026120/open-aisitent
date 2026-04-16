@@ -17,9 +17,8 @@ import {
   routeScenario,
   ticketsScenario,
 } from "../section/test-scenarios.js";
-import { MockHandoffTools } from "../tools/mock-handoff-tools.js";
-import { MockKnowledgeTools } from "../tools/mock-knowledge-tools.js";
-import { MockTicketTools } from "../tools/mock-ticket-tools.js";
+import { createFakeSqlTicketToolsBundle } from "../tools/fake-ticket-tools.js";
+import { createConsoleHandoffTools } from "../tools/handoff-tools.js";
 import { createGateway } from "../gateway/gateway.js";
 import type { GatewayBusinessMessageRequest, GatewayConfig } from "../gateway/types.js";
 import { createFileSessionStore } from "../session/session-store.js";
@@ -81,7 +80,12 @@ export interface GatewayDemoTrace {
   };
   downstreamRoute: AgentRoute;
   downstreamReply: string;
-  knowledgeToolResult: KnowledgeCandidate[] | null;
+  knowledgeContextResult:
+    | {
+        summary: string;
+        entryIds: string[];
+      }
+    | null;
   ticketToolResult:
     | {
         action: "query" | "create" | "update";
@@ -93,6 +97,7 @@ export interface GatewayDemoTrace {
         queueId: string;
         acceptedAt: string;
         urgency: "normal" | "urgent";
+        consoleView: string;
       }
     | null;
 }
@@ -100,8 +105,13 @@ export interface GatewayDemoTrace {
 export async function runGatewayDemo(options: GatewayDemoOptions = {}): Promise<GatewayDemoTrace> {
   const incomingMessage = createDemoBusinessMessage(options);
   const selectedRoute = options.route ?? inferRouteFromMessage(incomingMessage.text);
-  const knowledgeCandidates =
+  const storeDir = options.storeDir ?? path.join(process.cwd(), ".demo-session-store");
+  const baseKnowledgeCandidates =
     options.knowledgeCandidates ?? knowledgeScenario.knowledgeCandidates;
+  const knowledgeCandidates = buildKnowledgeCandidatesForDemo(
+    incomingMessage.text,
+    baseKnowledgeCandidates,
+  );
   const llmSelection = createDemoLlmSelection({
     selectedRoute,
     incomingMessage,
@@ -125,47 +135,26 @@ export async function runGatewayDemo(options: GatewayDemoOptions = {}): Promise<
     llmClient: llmSelection.serviceLlmClient,
   });
 
-  const retrievedKnowledge = buildKnowledgeCandidatesForDemo(incomingMessage.text, knowledgeCandidates);
   const knowledgeAgent = createKnowledgeAgent({
     llmClient: llmSelection.knowledgeLlmClient,
-    knowledgeTools: MockKnowledgeTools.fromCandidates(retrievedKnowledge),
+  });
+
+  const fakeSqlTicketBundle = createFakeSqlTicketToolsBundle({
+    databasePath: path.join(storeDir, "tickets.sqlite"),
+    seed: true,
   });
 
   const ticketsAgent = createTicketsAgent({
     llmClient: llmSelection.ticketsLlmClient,
-    ticketTools: new MockTicketTools(
-      () =>
-        incomingMessage.ticketState ?? {
-          ticketId: "TK-20260307-01",
-          status: "pending",
-          priority: "high",
-          summary: "用户反馈退款迟迟未到账。",
-          lastUpdateAt: "2026-03-10T09:30:00Z",
-        },
-      () => ({
-        ticketId: "TK-NEW-01",
-        status: "open",
-        priority: "medium",
-        summary: incomingMessage.text,
-        lastUpdateAt: "2026-03-10T10:05:00Z",
-      }),
-      (params) => ({
-        ticketId: params.ticketId,
-        status: params.status ?? "pending",
-        priority: params.priority ?? "high",
-        summary: params.summary ?? incomingMessage.text,
-        lastUpdateAt: "2026-03-10T10:06:00Z",
-      }),
-    ),
+    ticketTools: fakeSqlTicketBundle.tools,
   });
 
   const handoffAgent = createHandoffToHumanAgent({
     llmClient: llmSelection.handoffLlmClient,
-    handoffTools: new MockHandoffTools((params) => ({
+    handoffTools: createConsoleHandoffTools({
       queueId: "queue-001",
-      acceptedAt: "2026-03-08T12:00:00Z",
-      urgency: params.urgency,
-    })),
+      now: () => "2026-03-08T12:00:00Z",
+    }),
   });
 
   const orchestrator = createSupportOrchestrator({
@@ -175,7 +164,6 @@ export async function runGatewayDemo(options: GatewayDemoOptions = {}): Promise<
     handoffAgent,
   });
 
-  const storeDir = options.storeDir ?? path.join(process.cwd(), ".demo-session-store");
   const sessionStore = createFileSessionStore(storeDir);
   const gateway = createGateway({
     config: gatewayConfig,
@@ -183,47 +171,58 @@ export async function runGatewayDemo(options: GatewayDemoOptions = {}): Promise<
     sessionStore,
   });
 
-  const result = await gateway.handleBusinessMessage(incomingMessage);
-  const storedRecord = await sessionStore.getRecord(incomingMessage.conversationId);
+  try {
+    const result = await gateway.handleBusinessMessage(incomingMessage);
+    const storedRecord = await sessionStore.getRecord(incomingMessage.conversationId);
 
-  return {
-    llm: llmSelection.trace,
-    ingress: {
-      channel: incomingMessage.channel,
-      conversationId: incomingMessage.conversationId,
-      senderId: incomingMessage.senderId,
-      senderName: incomingMessage.senderName,
-      messageId: incomingMessage.messageId,
-      text: incomingMessage.text,
-    },
-    adaptedSession: {
-      sessionId: result.session.sessionId,
-      customerId: result.session.customerId,
-      latestUserMessage: result.session.latestUserMessage,
-      historyCount: result.session.history.length,
-      ticketId: result.session.ticketState?.ticketId,
-    },
-    sessionStore: {
-      storeDir,
-      sessionFilePath: sessionStore.resolveSessionFilePath(incomingMessage.conversationId),
-      transcriptCount: storedRecord?.transcript.length ?? 0,
-    },
-    routeDecision: result.orchestratorResult.routeResult.decision,
-    downstreamRoute: result.orchestratorResult.downstream.route,
-    downstreamReply: result.reply,
-    knowledgeToolResult:
-      result.orchestratorResult.downstream.route === "knowledge"
-        ? result.orchestratorResult.downstream.result.retrievedCandidates
-        : null,
-    ticketToolResult:
-      result.orchestratorResult.downstream.route === "tickets"
-        ? result.orchestratorResult.downstream.result.toolResult
-        : null,
-    handoffToolResult:
-      result.orchestratorResult.downstream.route === "handoff"
-        ? result.orchestratorResult.downstream.result.uploadResult
-        : null,
-  };
+    return {
+      llm: llmSelection.trace,
+      ingress: {
+        channel: incomingMessage.channel,
+        conversationId: incomingMessage.conversationId,
+        senderId: incomingMessage.senderId,
+        senderName: incomingMessage.senderName,
+        messageId: incomingMessage.messageId,
+        text: incomingMessage.text,
+      },
+      adaptedSession: {
+        sessionId: result.session.sessionId,
+        customerId: result.session.customerId,
+        latestUserMessage: result.session.latestUserMessage,
+        historyCount: result.session.history.length,
+        ticketId: result.session.ticketState?.ticketId,
+      },
+      sessionStore: {
+        storeDir,
+        sessionFilePath: sessionStore.resolveSessionFilePath(incomingMessage.conversationId),
+        transcriptCount: storedRecord?.transcript.length ?? 0,
+      },
+      routeDecision: result.orchestratorResult.routeResult.decision,
+      downstreamRoute: result.orchestratorResult.downstream.route,
+      downstreamReply: result.reply,
+      knowledgeContextResult:
+        result.orchestratorResult.downstream.route === "knowledge"
+          ? {
+              summary:
+                result.orchestratorResult.downstream.result.usedKnowledgeContext?.summary ?? "",
+              entryIds:
+                result.orchestratorResult.downstream.result.usedKnowledgeContext?.entries.map(
+                  (entry) => entry.id,
+                ) ?? [],
+            }
+          : null,
+      ticketToolResult:
+        result.orchestratorResult.downstream.route === "tickets"
+          ? result.orchestratorResult.downstream.result.toolResult
+          : null,
+      handoffToolResult:
+        result.orchestratorResult.downstream.route === "handoff"
+          ? result.orchestratorResult.downstream.result.uploadResult
+          : null,
+    };
+  } finally {
+    fakeSqlTicketBundle.close();
+  }
 }
 
 function createDemoLlmSelection(params: {
@@ -256,11 +255,6 @@ function createDemoLlmSelection(params: {
     };
   }
 
-  const retrievedKnowledge = buildKnowledgeCandidatesForDemo(
-    params.incomingMessage.text,
-    params.knowledgeCandidates,
-  );
-
   return {
     serviceLlmClient: MockLlmClient.fromText(
       JSON.stringify(buildRouteDecision(params.selectedRoute, params.incomingMessage.channel)),
@@ -268,9 +262,8 @@ function createDemoLlmSelection(params: {
     knowledgeLlmClient: MockLlmClient.fromText(
       JSON.stringify({
         shouldAnswerDirectly: true,
-        suggestedSearchQuery: inferKnowledgeQuery(params.incomingMessage.text),
         answerDraft: `根据当前知识库，关于“${params.incomingMessage.text}”，建议先按标准说明处理。`,
-        citedKnowledgeIds: retrievedKnowledge.map((item) => item.id),
+        citedKnowledgeIds: params.knowledgeCandidates.map((item) => item.id),
       }),
     ),
     ticketsLlmClient: MockLlmClient.fromText(
@@ -403,13 +396,6 @@ function buildRouteDecision(route: AgentRoute, channel: string) {
       channel,
     },
   };
-}
-
-function inferKnowledgeQuery(message: string): string {
-  if (/退款/u.test(message)) {
-    return "退款时效";
-  }
-  return "客服常见问题";
 }
 
 function buildKnowledgeCandidatesForDemo(

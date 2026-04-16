@@ -1,0 +1,40 @@
+{
+  "sessionId": "cli-session-1773292594180-4ibm4d",
+  "customerId": "cust-cli-001",
+  "channel": "terminal",
+  "senderId": "cli-user-001",
+  "senderName": "CLI User",
+  "transcript": [
+    {
+      "id": "msg-1773292596887-1",
+      "role": "user",
+      "text": "hi!",
+      "createdAt": "2026-03-12T05:16:36.885Z"
+    },
+    {
+      "id": "assistant-1773292620549",
+      "role": "assistant",
+      "text": "您好！欢迎使用客服助手。我可以帮您：\n\n1. 解答常见政策问题\n2. 查询工单状态\n3. 帮助创建或更新工单\n4. 在需要时为您转接人工服务\n\n请问有什么可以帮到您的？",
+      "createdAt": "2026-03-12T05:17:00.547Z"
+    }
+  ],
+  "sharedContext": {
+    "channelCapabilities": {
+      "channel": "terminal",
+      "supportsAttachments": true,
+      "supportsRealtimeHandoff": true,
+      "supportsRichText": true,
+      "supportsButtons": false
+    },
+    "customerProfile": {
+      "customerId": "cust-cli-001"
+    },
+    "operational": {
+      "handoffEnabled": true,
+      "ticketingEnabled": true,
+      "knowledgeEnabled": true
+    }
+  },
+  "createdAt": "2026-03-12T05:16:36.885Z",
+  "updatedAt": "2026-03-12T05:17:00.547Z"
+}

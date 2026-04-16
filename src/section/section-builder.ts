@@ -29,7 +29,7 @@ export class DefaultSectionBuilder implements SectionBuilder {
     return createPromptBundle("knowledge", input.session.sessionId, input.session.history.length, {
       sections,
       hasTicketState: Boolean(input.session.ticketState),
-      knowledgeCandidateCount: input.knowledgeCandidates.length,
+      knowledgeCandidateCount: input.knowledgeContext?.entries.length ?? input.knowledgeCandidates.length,
     });
   }
 
