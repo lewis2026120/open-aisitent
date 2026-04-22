@@ -16,11 +16,17 @@ export class FileSessionStore implements SessionStore {
     validateBusinessMessage(input);
 
     const existing = await this.readRecord(input.conversationId);
+    const memoryTurns = existing
+      ? []
+      : await this.collectRecentCustomerMemoryTurns(input.customerId, input.conversationId);
     const record =
       existing ??
       createRecord({
         input,
-        history: (input.history ?? []).map(convertHistoryMessageToTurn),
+        history: [
+          ...memoryTurns,
+          ...(input.history ?? []).map(convertHistoryMessageToTurn),
+        ],
       });
 
     record.channel = input.channel;
@@ -112,6 +118,59 @@ export class FileSessionStore implements SessionStore {
       }
       throw error;
     }
+  }
+
+  private async collectRecentCustomerMemoryTurns(
+    customerId: string,
+    excludeSessionId: string,
+  ): Promise<ConversationTurn[]> {
+    let sessionFiles: string[];
+    try {
+      sessionFiles = await fs.readdir(this.rootDir);
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      if (code === "ENOENT") {
+        return [];
+      }
+      throw error;
+    }
+
+    const records: SessionRecord[] = [];
+    for (const fileName of sessionFiles) {
+      if (!fileName.endsWith(".json")) {
+        continue;
+      }
+
+      const filePath = path.join(this.rootDir, fileName);
+      try {
+        const content = await fs.readFile(filePath, "utf8");
+        const record = JSON.parse(content) as SessionRecord;
+        if (record.customerId !== customerId || record.sessionId === excludeSessionId) {
+          continue;
+        }
+        if (record.transcript.length === 0) {
+          continue;
+        }
+        records.push(record);
+      } catch {
+        continue;
+      }
+    }
+
+    const recentRecords = records
+      .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
+      .slice(0, 2);
+
+    const memoryTurns: ConversationTurn[] = [];
+    for (const record of recentRecords.reverse()) {
+      const turns = record.transcript.slice(-4).map((turn) => ({
+        ...turn,
+        id: `mem-${record.sessionId}-${turn.id}`,
+      }));
+      memoryTurns.push(...turns);
+    }
+
+    return memoryTurns;
   }
 
   private async writeRecord(record: SessionRecord): Promise<void> {

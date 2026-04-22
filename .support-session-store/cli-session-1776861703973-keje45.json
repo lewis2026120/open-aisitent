@@ -1,0 +1,107 @@
+{
+  "sessionId": "cli-session-1776861703973-keje45",
+  "customerId": "cust-cli-001",
+  "channel": "terminal",
+  "senderId": "cli-user-001",
+  "senderName": "CLI User",
+  "transcript": [
+    {
+      "id": "mem-cli-session-1776331934126-i9h2pk-msg-1776331987247-2",
+      "role": "user",
+      "text": "我是新客户，这个设备第一次怎么配置",
+      "createdAt": "2026-04-16T09:33:07.247Z"
+    },
+    {
+      "id": "mem-cli-session-1776331934126-i9h2pk-assistant-1776332033761",
+      "role": "assistant",
+      "text": "您好！欢迎成为我们的新客户。\n\n针对首次设备配置，一般有以下基础步骤：\n\n1. **设备通电与联网** - 将设备连接电源，并通过网线或WiFi接入网络\n2. **激活设备** - 在管理平台或App中添加设备，按指引完成首次绑定\n3. **基础参数设置** - 根据业务需求配置网络参数、告警阈值等\n4. **验证连通性** - 确认设备已正常上线并可执行基础操作\n\n为了给您更准确的配置指引，请问您使用的是哪款设备型号？这样我可以提供更具体的初始化步骤。",
+      "createdAt": "2026-04-16T09:33:53.759Z"
+    },
+    {
+      "id": "mem-cli-session-1776331934126-i9h2pk-msg-1776332111579-3",
+      "role": "user",
+      "text": "我的设备总是离线怎么办",
+      "createdAt": "2026-04-16T09:35:11.578Z"
+    },
+    {
+      "id": "mem-cli-session-1776331934126-i9h2pk-assistant-1776332148299",
+      "role": "assistant",
+      "text": "您好！设备离线问题，建议按以下步骤排查：\n\n1. **检查网络连接** - 确认网线是否松动，WiFi信号是否稳定，尝试重新插拔网线或切换网络\n2. **检查设备电源** - 确认设备指示灯状态是否正常\n3. **查看设备日志** - 通过管理平台或App查看设备离线前的状态记录\n4. **检查固件版本** - 确认是否为最新固件，必要时升级\n5. **重启设备** - 尝试重启设备看是否能恢复上线\n\n由于不同设备型号的排查重点略有差异，请问您使用的是哪款设备型号？这样我可以提供更针对性的解决方案。",
+      "createdAt": "2026-04-16T09:35:48.298Z"
+    },
+    {
+      "id": "mem-cli-session-1776775167339-b967n7-msg-1776775392317-4",
+      "role": "user",
+      "text": "我刚才说的是哪台设备?",
+      "createdAt": "2026-04-21T12:43:12.317Z"
+    },
+    {
+      "id": "mem-cli-session-1776775167339-b967n7-assistant-1776775404908",
+      "role": "assistant",
+      "text": "您刚才说的是 OC-A100 设备。在我们的对话中，您确认了设备型号是 OC-A100，这款设备支持远程诊断、基础日志导出与标准告警功能。",
+      "createdAt": "2026-04-21T12:43:24.907Z"
+    },
+    {
+      "id": "mem-cli-session-1776775167339-b967n7-msg-1776775479279-5",
+      "role": "user",
+      "text": "请帮我新建一个工单，我的这个设备总是离线.",
+      "createdAt": "2026-04-21T12:44:39.276Z"
+    },
+    {
+      "id": "mem-cli-session-1776775167339-b967n7-assistant-1776775499499",
+      "role": "assistant",
+      "text": "我已经为你创建工单 TK-20260421-01，当前状态是已受理。我会继续帮你跟进。",
+      "createdAt": "2026-04-21T12:44:59.498Z"
+    },
+    {
+      "id": "msg-1776861722219-1",
+      "role": "user",
+      "text": "为什么我的设备不能用了",
+      "createdAt": "2026-04-22T12:42:02.215Z"
+    },
+    {
+      "id": "assistant-1776861740839",
+      "role": "assistant",
+      "text": "您好！针对 OC-A100 设备不能使用的情况，根据您之前已创建的工单 TK-20260421-01（设备离线问题），我提供以下两种处理路径：\n\n**如果设备是完全无法开机/无响应**：\n1. 尝试长按电源键 10 秒强制重启\n2. 检查电源适配器连接是否正常\n3. 如同之前沟通，这是 OC-A100 设备，您可以尝试执行固件自检（部分批次首次激活可能需要）\n\n**如果设备是离线无法连接**：\n1. 确认网络指示灯状态\n2. 重启设备网络模块\n3. 检查工单 TK-20260421-01 的当前处理进度\n\n请问您说的\"不能用了\"具体是哪种情况？设备是完全无法开机，还是显示离线无法连接？我可以帮您进一步排查或更新工单进度。",
+      "createdAt": "2026-04-22T12:42:20.838Z"
+    },
+    {
+      "id": "msg-1776861772728-2",
+      "role": "user",
+      "text": "还是不能用，我需要换货",
+      "createdAt": "2026-04-22T12:42:52.728Z"
+    },
+    {
+      "id": "assistant-1776861800729",
+      "role": "assistant",
+      "text": "我已经为你创建工单 TK-20260422-01，当前状态是已受理。我会继续帮你跟进。",
+      "createdAt": "2026-04-22T12:43:20.729Z"
+    }
+  ],
+  "sharedContext": {
+    "channelCapabilities": {
+      "channel": "terminal",
+      "supportsAttachments": true,
+      "supportsRealtimeHandoff": true,
+      "supportsRichText": true,
+      "supportsButtons": false
+    },
+    "customerProfile": {
+      "customerId": "cust-cli-001"
+    },
+    "operational": {
+      "handoffEnabled": true,
+      "ticketingEnabled": true,
+      "knowledgeEnabled": true
+    }
+  },
+  "createdAt": "2026-04-22T12:42:02.215Z",
+  "updatedAt": "2026-04-22T12:43:20.729Z",
+  "ticketState": {
+    "ticketId": "TK-20260422-01",
+    "status": "open",
+    "priority": "medium",
+    "summary": "还是不能用，我需要换货",
+    "lastUpdateAt": "2026-04-22T12:43:11.360Z"
+  }
+}

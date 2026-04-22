@@ -1,0 +1,46 @@
+{
+  "sessionId": "trace-memory-s1",
+  "customerId": "cust-memory-demo",
+  "channel": "whatsapp",
+  "senderId": "sender-003",
+  "senderName": "王五",
+  "transcript": [
+    {
+      "id": "msg-mem-s1-001",
+      "role": "user",
+      "text": "我的退款申请还没处理。",
+      "createdAt": "2026-04-19T04:33:02.926Z"
+    },
+    {
+      "id": "assistant-1776745982928",
+      "role": "assistant",
+      "text": "根据当前准备好的知识，我建议先围绕“大概什么时候能处理完？”给出标准说明，并在需要时继续分流到工单或人工。",
+      "createdAt": "2026-04-21T04:33:02.928Z"
+    },
+    {
+      "id": "msg-mem-s1-002",
+      "role": "user",
+      "text": "大概什么时候能处理完？",
+      "createdAt": "2026-04-20T04:33:02.928Z"
+    }
+  ],
+  "sharedContext": {
+    "channelCapabilities": {
+      "channel": "whatsapp",
+      "supportsAttachments": true,
+      "supportsRealtimeHandoff": true,
+      "supportsRichText": true,
+      "supportsButtons": false
+    },
+    "customerProfile": {
+      "customerId": "cust-memory-demo"
+    },
+    "operational": {
+      "handoffEnabled": true,
+      "ticketingEnabled": true,
+      "knowledgeEnabled": true
+    }
+  },
+  "createdAt": "2026-04-19T04:33:02.926Z",
+  "updatedAt": "2026-04-21T04:33:02.928Z"
+}

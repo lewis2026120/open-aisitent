@@ -13,8 +13,10 @@ import {
 } from "../llm/minimax-client.js";
 import { createSupportOrchestrator } from "../orchestration/support-orchestrator.js";
 import { createFileSessionStore } from "../session/session-store.js";
-import { createFakeSqlTicketToolsBundle, type FakeSqlTicketToolsBundle } from "../tools/fake-ticket-tools.js";
+import { createFakeSqlTicketToolsBundle } from "../tools/fake-ticket-tools.js";
+import { createBashTicketToolsBundle } from "../tools/bash-ticket-tools.js";
 import { createConsoleHandoffTools } from "../tools/handoff-tools.js";
+import type { TicketTools } from "../tools/ticket-tools.js";
 import { createDefaultGatewayConfig } from "./default-support-config.js";
 import { createHeuristicMockSupportLlmClient } from "./heuristic-mock-support-llm.js";
 
@@ -26,6 +28,7 @@ export interface SupportRuntimeOptions {
   minimaxBaseUrl?: string;
   minimaxModel?: string;
   minimaxMaxTokens?: number;
+  ticketToolMode?: "native" | "bash";
 }
 
 export interface SupportRuntimeTrace {
@@ -54,6 +57,10 @@ export interface SupportRuntimeTrace {
     storeDir: string;
     sessionFilePath: string;
     transcriptCount: number;
+  };
+  ticketTools: {
+    backend: "native" | "bash";
+    databasePath: string;
   };
   routeDecision: {
     route: "knowledge" | "tickets" | "handoff";
@@ -95,9 +102,9 @@ export function createSupportRuntime(options: SupportRuntimeOptions = {}): Suppo
   const storeDir = options.storeDir ?? path.join(process.cwd(), ".support-session-store");
   const llmSelection = createRuntimeLlmSelection(options);
   const sessionStore = createFileSessionStore(storeDir);
-  const ticketBundle = createFakeSqlTicketToolsBundle({
-    databasePath: path.join(storeDir, "tickets.sqlite"),
-    seed: true,
+  const ticketBundle = createRuntimeTicketToolsBundle({
+    storeDir,
+    mode: options.ticketToolMode ?? "native",
   });
 
   const orchestrator = createSupportOrchestrator({
@@ -146,6 +153,10 @@ export function createSupportRuntime(options: SupportRuntimeOptions = {}): Suppo
           sessionFilePath: sessionStore.resolveSessionFilePath(request.conversationId),
           transcriptCount: storedRecord?.transcript.length ?? 0,
         },
+        ticketTools: {
+          backend: ticketBundle.backend,
+          databasePath: ticketBundle.databasePath,
+        },
         routeDecision: result.orchestratorResult.routeResult.decision,
         downstreamRoute: result.orchestratorResult.downstream.route,
         downstreamReply: result.reply,
@@ -172,6 +183,45 @@ export function createSupportRuntime(options: SupportRuntimeOptions = {}): Suppo
     },
     close(): void {
       ticketBundle.close();
+    },
+  };
+}
+
+function createRuntimeTicketToolsBundle(params: {
+  storeDir: string;
+  mode: "native" | "bash";
+}): {
+  backend: "native" | "bash";
+  databasePath: string;
+  tools: TicketTools;
+  close: () => void;
+} {
+  const databasePath = path.join(params.storeDir, "tickets.sqlite");
+
+  if (params.mode === "bash") {
+    const bundle = createBashTicketToolsBundle({
+      databasePath,
+    });
+    return {
+      backend: "bash",
+      databasePath,
+      tools: bundle.tools,
+      close: () => {
+        // Bash-backed tools are process-based and do not hold DB handles.
+      },
+    };
+  }
+
+  const bundle = createFakeSqlTicketToolsBundle({
+    databasePath,
+    seed: true,
+  });
+  return {
+    backend: "native",
+    databasePath,
+    tools: bundle.tools,
+    close: () => {
+      bundle.close();
     },
   };
 }

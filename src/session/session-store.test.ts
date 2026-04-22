@@ -100,4 +100,39 @@ describe("FileSessionStore", () => {
 
     expect(snapshot?.ticketState?.status).toBe("open");
   });
+
+  it("hydrates a new session with recent memory from the same customer", async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "open-assistant-session-"));
+    tempDirs.push(dir);
+    const store = createFileSessionStore(dir);
+
+    await store.recordBusinessMessage({
+      channel: "whatsapp",
+      conversationId: "conv-memory-001",
+      customerId: "cust-memory-001",
+      senderId: "user-memory-001",
+      messageId: "msg-memory-001",
+      text: "我的设备这两天频繁断线。",
+      timestamp: "2026-03-10T10:00:00Z",
+    });
+
+    await store.appendAssistantReply({
+      sessionId: "conv-memory-001",
+      text: "我先帮你排查网络与固件版本。",
+      timestamp: "2026-03-10T10:00:20Z",
+      messageId: "reply-memory-001",
+    });
+
+    const snapshot = await store.recordBusinessMessage({
+      channel: "whatsapp",
+      conversationId: "conv-memory-002",
+      customerId: "cust-memory-001",
+      senderId: "user-memory-001",
+      messageId: "msg-memory-002",
+      text: "我换了环境还是有问题，继续帮我看。",
+      timestamp: "2026-03-10T11:00:00Z",
+    });
+
+    expect(snapshot.history.some((turn) => turn.id.startsWith("mem-conv-memory-001"))).toBe(true);
+  });
 });

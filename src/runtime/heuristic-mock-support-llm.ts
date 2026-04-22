@@ -86,6 +86,42 @@ function buildKnowledgePlan(request: LlmGenerateRequest): KnowledgeAnswerPlan {
     };
   }
 
+  if (/服务|业务|产品|套餐/u.test(inputText)) {
+    return {
+      shouldAnswerDirectly: true,
+      answerDraft:
+        "我们主要有三种服务：基础版、进阶版、旗舰版。基础版适合刚起步团队，进阶版适合大多数企业，旗舰版适合对稳定性要求很高的公司。你告诉我公司大概人数和设备量，我可以直接帮你选。",
+      citedKnowledgeIds,
+    };
+  }
+
+  if (/性价比|最划算|最值|推荐.*套餐/u.test(inputText)) {
+    return {
+      shouldAnswerDirectly: true,
+      answerDraft:
+        "一般来说，进阶版最划算。它的价格和功能比较平衡，常见问题基本都能覆盖。参考价格：基础版约 699 元/月，进阶版约 1299 元/月，旗舰版约 2999 元/月。大多数公司先选进阶版就够用。",
+      citedKnowledgeIds,
+    };
+  }
+
+  if (/办理需要多久|多久.*开通|开通时长|办理时长|生效时间/u.test(inputText)) {
+    return {
+      shouldAnswerDirectly: true,
+      answerDraft:
+        "开通时间不长：基础版一般 10 到 30 分钟，进阶版一般 2 到 4 小时，旗舰版一般 1 个工作日。资料齐全的话，通常当天就能用上。",
+      citedKnowledgeIds,
+    };
+  }
+
+  if (/设备.*不能用|不能用|用不了|故障|异常/u.test(inputText)) {
+    return {
+      shouldAnswerDirectly: true,
+      answerDraft:
+        "我先帮你排查。你告诉我三件事就行：设备型号、具体现象（开不了机/老掉线/某功能不能用）、大概什么时候开始的。常见原因有四个：系统版本太旧、接口接触不好、电源不稳定、早期批次系统小问题。你把型号发我，我一步一步带你查。",
+      citedKnowledgeIds,
+    };
+  }
+
   if (/退款/u.test(inputText)) {
     return {
       shouldAnswerDirectly: true,
@@ -96,7 +132,7 @@ function buildKnowledgePlan(request: LlmGenerateRequest): KnowledgeAnswerPlan {
 
   return {
     shouldAnswerDirectly: true,
-    answerDraft: `根据当前准备好的知识，我建议先围绕“${inputText}”给出标准说明，并在需要时继续分流到工单或人工。`,
+    answerDraft: `这个问题我可以先给你一个简单说法：${inputText}。如果你愿意，我再按你的实际情况一步步细讲。`,
     citedKnowledgeIds,
   };
 }

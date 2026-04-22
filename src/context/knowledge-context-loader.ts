@@ -56,6 +56,31 @@ function buildKnowledgeContextSummary(params: KnowledgeContextLoadParams): strin
     summaryParts.push(`Product: ${product}`);
   }
 
+  const persona = params.sharedContext?.customerProfile?.persona;
+  if (persona) {
+    summaryParts.push(`Customer persona: ${persona}`);
+  }
+
+  const deviceModel = params.sharedContext?.customerProfile?.deviceModel;
+  if (deviceModel) {
+    summaryParts.push(`Device model: ${deviceModel}`);
+  }
+
+  const region = params.sharedContext?.customerProfile?.region;
+  if (region) {
+    summaryParts.push(`Region: ${region}`);
+  }
+
+  const batch = params.sharedContext?.customerProfile?.batch;
+  if (batch !== undefined) {
+    summaryParts.push(`Batch: ${batch}`);
+  }
+
+  const channelEdition = params.sharedContext?.customerProfile?.channelEdition;
+  if (channelEdition) {
+    summaryParts.push(`Channel edition: ${channelEdition}`);
+  }
+
   if (params.routeDecision) {
     summaryParts.push(
       `Service route intent: ${params.routeDecision.intent} (${params.routeDecision.route})`,

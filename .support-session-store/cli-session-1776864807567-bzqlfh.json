@@ -1,0 +1,40 @@
+{
+  "sessionId": "cli-session-1776864807567-bzqlfh",
+  "customerId": "cust-cli-1776864807567-t84om0",
+  "channel": "terminal",
+  "senderId": "cli-user-001",
+  "senderName": "CLI User",
+  "transcript": [
+    {
+      "id": "msg-1776864818599-1",
+      "role": "user",
+      "text": "你们企业都有什么服务",
+      "createdAt": "2026-04-22T13:33:38.592Z"
+    },
+    {
+      "id": "assistant-1776864839016",
+      "role": "assistant",
+      "text": "我们企业主要提供以下核心服务：\n\n1. **云服务器套餐** - 提供各类云计算资源解决方案\n2. **智能终端网络设备租赁** - 包括各类OC系列路由器（如OC-A100、OC-A200、OC-PRO300、OC-MINI110、OC-EDGE500、OC-LITE210等型号）\n3. **全天候IT运维外包** - 7×24小时的专业IT运维服务支持\n\n如果您想了解更多关于具体产品型号或服务套餐的详细信息，欢迎随时咨询。",
+      "createdAt": "2026-04-22T13:33:59.015Z"
+    }
+  ],
+  "sharedContext": {
+    "channelCapabilities": {
+      "channel": "terminal",
+      "supportsAttachments": true,
+      "supportsRealtimeHandoff": true,
+      "supportsRichText": true,
+      "supportsButtons": false
+    },
+    "customerProfile": {
+      "customerId": "cust-cli-1776864807567-t84om0"
+    },
+    "operational": {
+      "handoffEnabled": true,
+      "ticketingEnabled": true,
+      "knowledgeEnabled": true
+    }
+  },
+  "createdAt": "2026-04-22T13:33:38.592Z",
+  "updatedAt": "2026-04-22T13:33:59.015Z"
+}

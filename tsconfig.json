@@ -11,6 +11,11 @@
         "verbatimModuleSyntax": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
+        "cSpell.enableFiletypes": {
+  "typescript": false,
+  "javascript": false
+        },
+
         "types": [
             "node",
             "vitest/globals"

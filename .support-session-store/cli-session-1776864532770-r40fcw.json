@@ -1,0 +1,64 @@
+{
+  "sessionId": "cli-session-1776864532770-r40fcw",
+  "customerId": "cust-cli-1776864532770-cq2qfh",
+  "channel": "terminal",
+  "senderId": "cli-user-001",
+  "senderName": "CLI User",
+  "transcript": [
+    {
+      "id": "msg-1776864532778-1",
+      "role": "user",
+      "text": "你们企业都有什么服务？",
+      "createdAt": "2026-04-22T13:28:52.777Z"
+    },
+    {
+      "id": "assistant-1776864532786",
+      "role": "assistant",
+      "text": "根据当前准备好的知识，我建议先围绕“你们企业都有什么服务？”给出标准说明，并在需要时继续分流到工单或人工。",
+      "createdAt": "2026-04-22T13:28:52.785Z"
+    },
+    {
+      "id": "msg-1776864532786-2",
+      "role": "user",
+      "text": "哪个性价比最高？",
+      "createdAt": "2026-04-22T13:28:52.786Z"
+    },
+    {
+      "id": "assistant-1776864532787",
+      "role": "assistant",
+      "text": "根据当前准备好的知识，我建议先围绕“哪个性价比最高？”给出标准说明，并在需要时继续分流到工单或人工。",
+      "createdAt": "2026-04-22T13:28:52.787Z"
+    },
+    {
+      "id": "msg-1776864532787-3",
+      "role": "user",
+      "text": "办理需要多久？",
+      "createdAt": "2026-04-22T13:28:52.787Z"
+    },
+    {
+      "id": "assistant-1776864532788",
+      "role": "assistant",
+      "text": "根据当前准备好的知识，我建议先围绕“办理需要多久？”给出标准说明，并在需要时继续分流到工单或人工。",
+      "createdAt": "2026-04-22T13:28:52.788Z"
+    }
+  ],
+  "sharedContext": {
+    "channelCapabilities": {
+      "channel": "terminal",
+      "supportsAttachments": true,
+      "supportsRealtimeHandoff": true,
+      "supportsRichText": true,
+      "supportsButtons": false
+    },
+    "customerProfile": {
+      "customerId": "cust-cli-1776864532770-cq2qfh"
+    },
+    "operational": {
+      "handoffEnabled": true,
+      "ticketingEnabled": true,
+      "knowledgeEnabled": true
+    }
+  },
+  "createdAt": "2026-04-22T13:28:52.777Z",
+  "updatedAt": "2026-04-22T13:28:52.788Z"
+}

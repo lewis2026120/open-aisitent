@@ -43,8 +43,13 @@ const demoSession: SessionSnapshot = {
     customerProfile: {
       customerId: "cust-9001",
       tier: "vip",
+      persona: "existing_customer",
       locale: "zh-CN",
       product: "refund-service",
+      deviceModel: "OC-PRO300",
+      region: "华东",
+      batch: 2,
+      channelEdition: "专供",
       tags: ["vip", "refund-risk"],
       riskLevel: "medium",
     },

@@ -1,4 +1,5 @@
 import type { ClassificationExample, KnowledgeCandidate, TaskGoal, ToolSummary } from "../core/contracts.js";
+import { buildSimulatedSupportKnowledgeCandidates } from "../context/simulated-support-knowledge.js";
 import type { GatewayConfig } from "../gateway/types.js";
 
 const routeExamples: ClassificationExample[] = [
@@ -32,6 +33,30 @@ const routeExamples: ClassificationExample[] = [
     example: "现在就给我转人工，我要投诉。",
     reason: "The user explicitly requests a human handoff or escalation.",
   },
+  {
+    intent: "new_customer_device_setup",
+    route: "knowledge",
+    example: "我是新客户，设备第一次开机该怎么配置？",
+    reason: "New-customer onboarding and capability questions should go to knowledge first.",
+  },
+  {
+    intent: "batch_fault_followup",
+    route: "tickets",
+    example: "我是华东第2批次设备，最近频繁掉线，帮我跟进处理。",
+    reason: "Batch and device fault tracking requires ticket-based handling.",
+  },
+  {
+    intent: "edition_capability_gap",
+    route: "knowledge",
+    example: "普通版为什么没有专供版的那个功能？",
+    reason: "Edition capability differences should be answered through policy knowledge.",
+  },
+  {
+    intent: "high_emotion_escalation",
+    route: "handoff",
+    example: "这个问题我已经反馈很多次了，马上转人工主管。",
+    reason: "Strong emotional escalation should be routed to handoff.",
+  },
 ];
 
 const knowledgeCandidates: KnowledgeCandidate[] = [
@@ -63,6 +88,7 @@ const knowledgeCandidates: KnowledgeCandidate[] = [
     source: "knowledge/handoff.md",
     score: 0.86,
   },
+  ...buildSimulatedSupportKnowledgeCandidates(),
 ];
 
 const routeGoal: TaskGoal = {
@@ -108,15 +134,15 @@ const handoffGoal: TaskGoal = {
 const ticketTools: ToolSummary[] = [
   {
     name: "ticketsQuery",
-    description: "Look up an existing support ticket.",
+    description: "Look up an existing support ticket (SQL backend, supports bash execution mode).",
   },
   {
     name: "ticketsCreate",
-    description: "Create a new support ticket.",
+    description: "Create a new support ticket and persist it into SQL with success confirmation.",
   },
   {
     name: "ticketsUpdate",
-    description: "Update an existing support ticket.",
+    description: "Update an existing support ticket in SQL and return the latest ticket state.",
   },
 ];
 

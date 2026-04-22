@@ -1,0 +1,40 @@
+{
+  "sessionId": "trace-handoff-001",
+  "customerId": "cust-handoff-demo",
+  "channel": "telegram",
+  "senderId": "sender-002",
+  "senderName": "李四",
+  "transcript": [
+    {
+      "id": "msg-handoff-001",
+      "role": "user",
+      "text": "我要投诉，已经等了三小时了！",
+      "createdAt": "2026-04-21T04:33:02.916Z"
+    },
+    {
+      "id": "assistant-1776745982917",
+      "role": "assistant",
+      "text": "我已经为你整理好情况，并转交人工继续处理。",
+      "createdAt": "2026-04-21T04:33:02.917Z"
+    }
+  ],
+  "sharedContext": {
+    "channelCapabilities": {
+      "channel": "telegram",
+      "supportsAttachments": true,
+      "supportsRealtimeHandoff": true,
+      "supportsRichText": true,
+      "supportsButtons": false
+    },
+    "customerProfile": {
+      "customerId": "cust-handoff-demo"
+    },
+    "operational": {
+      "handoffEnabled": true,
+      "ticketingEnabled": true,
+      "knowledgeEnabled": true
+    }
+  },
+  "createdAt": "2026-04-21T04:33:02.916Z",
+  "updatedAt": "2026-04-21T04:33:02.917Z"
+}

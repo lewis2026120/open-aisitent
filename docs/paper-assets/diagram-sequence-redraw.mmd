@@ -1,0 +1,60 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "background": "#ececef",
+    "fontFamily": "Arial, PingFang SC, Microsoft YaHei, sans-serif",
+    "fontSize": "15px",
+    "actorFontSize": "16px",
+    "messageFontSize": "15px",
+    "labelFontSize": "15px",
+    "primaryColor": "#f6f3ff",
+    "primaryBorderColor": "#b9addf",
+    "primaryTextColor": "#3f3f46",
+    "lineColor": "#b9addf",
+    "signalColor": "#666666",
+    "signalTextColor": "#555555",
+    "actorBkg": "#f6f3ff",
+    "actorBorder": "#b9addf",
+    "actorTextColor": "#3f3f46",
+    "actorLineColor": "#b9addf",
+    "labelBoxBkgColor": "#f6f3ff",
+    "labelBoxBorderColor": "#b9addf",
+    "labelTextColor": "#4b5563",
+    "activationBorderColor": "#b9addf",
+    "activationBkgColor": "#ffffff",
+    "sequenceNumberColor": "#4b5563",
+    "tertiaryColor": "#ffffff"
+  },
+  "sequence": {
+    "actorMargin": 120,
+    "diagramMarginX": 120,
+    "diagramMarginY": 44,
+    "messageMargin": 50,
+    "boxMargin": 22,
+    "boxTextMargin": 16
+  }
+}}%%
+sequenceDiagram
+  participant U as 用户 User
+  participant R as 运行时 Runtime
+  participant S as 会话存储 SessionStore
+  participant G as 网关 Gateway
+  participant O as 编排器 Orchestrator
+  participant SA as 路由代理 RouteAgent
+  participant DA as 下游代理 DownstreamAgent
+  participant T as 工具 Tool
+
+  U->>R: 业务消息\nBusiness Message
+  R->>S: 记录消息\nrecordBusinessMessage
+  R->>G: 处理快照\nhandle(snapshot)
+  G->>O: 路由输入 + 角色输入\nroute + role inputs
+  O->>SA: 路由判定\nroute decision
+  SA-->>O: 路由/意图/置信度\nroute + intent + confidence
+  O->>DA: 执行单一路径\nrun downstream agent
+  DA->>T: 工具动作\ntool action
+  T-->>DA: 工具结果\ntool result
+  DA-->>O: 最终计划/回复\nfinal plan/reply
+  O-->>G: 下游结果\ndownstream result
+  G->>S: 追加回复/更新工单\nappend reply / update state
+  S-->>R: 会话快照回传\nsession snapshot updated
+  R-->>U: 最终回复 + 跟踪\nfinal reply + trace

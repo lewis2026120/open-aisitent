@@ -1,0 +1,39 @@
+  if (text.match(/工单|进度|状态|查询/)) {
+    return { route: "tickets", confidence: 0.91 };
+  }
+  if (text.match(/投诉|人工|升级|紧急/)) {
+    return { route: "handoff", confidence: 0.95 };
+  }
+  if (text.match(/退款|怎么|为什么|功能/)) {
+    return { route: "knowledge", confidence: 0.90 };
+  }
+
+
+
+npm run demo:gateway -- --mock --message "<用户消息>" --channel <渠道> --sender-name <姓名>
+
+npm run demo:gateway -- --mock --message "我的工单进展到哪里了？" --channel wechat --sender-name "张三"  ├─→ Gateway.recordBusinessMessage()
+  │     └─ 新建 JSON 会话文件（transcriptCount=1）
+  ├─→ ServiceAgent.run()
+  │     └─ { route: "tickets", intent: "check_ticket_progress", confidence: 0.91 }
+  ├─→ TicketsAgent.run()（循环 1 轮）
+  │     ├─ ticketsQuery({ customerId: "cust-tickets-demo" })
+  │     │     └─ ticketState: null（无历史工单记录）
+  │     └─ LLM 判断 action: "done"，生成引导回复
+  ├─→ SessionStore.updateTicketState(null)
+  └─→ SessionStore.appendAssistantReply()
+       └─ 回复："我可以帮你查询订单或工单的处理进度，但当前还缺少可定位的记录。请提供订单号、工单号，或更具体的下单信息。"
+
+
+用户消息 "我的工单进展到哪里了？"
+  ├─→ Gateway.recordBusinessMessage()
+  │     └─ 新建 JSON 会话文件（transcriptCount=1）
+  ├─→ ServiceAgent.run()
+  │     └─ { route: "tickets", intent: "check_ticket_progress", confidence: 0.91 }
+  ├─→ TicketsAgent.run()（循环 1 轮）
+  │     ├─ ticketsQuery({ customerId: "cust-tickets-demo" })
+  │     │     └─ ticketState: null（无历史工单记录）
+  │     └─ LLM 判断 action: "done"，生成引导回复
+  ├─→ SessionStore.updateTicketState(null)
+  └─→ SessionStore.appendAssistantReply()
+       └─ 回复："我可以帮你查询订单或工单的处理进度，但当前还缺少可定位的记录。请提供订单号、工单号，或更具体的下单信息。"

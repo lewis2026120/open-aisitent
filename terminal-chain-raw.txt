@@ -1,0 +1,243 @@
+
+> open-asisitent-claw@0.1.0 demo:terminal-chain
+> tsx src/benchmark/run-terminal-chain.ts
+
+
+========== TURN 1 ==========
+{
+  "llm": {
+    "mode": "mock",
+    "model": "heuristic-mock-support-llm",
+    "configuredFromEnv": false
+  },
+  "ingress": {
+    "channel": "terminal",
+    "conversationId": "conv-full-chain-001",
+    "senderId": "user-full-001",
+    "senderName": "测试用户",
+    "messageId": "msg-full-1",
+    "text": "我是新客户，这个设备第一次怎么配置？"
+  },
+  "adaptedSession": {
+    "sessionId": "conv-full-chain-001",
+    "customerId": "cust-full-001",
+    "latestUserMessage": "我是新客户，这个设备第一次怎么配置？",
+    "historyCount": 1
+  },
+  "sessionStore": {
+    "storeDir": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR",
+    "sessionFilePath": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR/conv-full-chain-001.json",
+    "transcriptCount": 2
+  },
+  "ticketTools": {
+    "backend": "bash",
+    "databasePath": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR/tickets.sqlite"
+  },
+  "routeDecision": {
+    "route": "knowledge",
+    "intent": "ask_policy_or_howto",
+    "confidence": 0.9,
+    "reason": "The user is asking a knowledge or policy question.",
+    "entities": {}
+  },
+  "downstreamRoute": "knowledge",
+  "downstreamReply": "根据当前准备好的知识，我建议先围绕“我是新客户，这个设备第一次怎么配置？”给出标准说明，并在需要时继续分流到工单或人工。",
+  "knowledgeContextResult": {
+    "summary": "Latest request focus: 我是新客户，这个设备第一次怎么配置？ | Customer persona: new_customer | Device model: OC-PRO300 | Region: 华东 | Batch: 2 | Channel edition: 专供",
+    "entryIds": [
+      "kb-general-01",
+      "kb-refund-01",
+      "kb-ticket-01",
+      "kb-escalation-01",
+      "kb-profile-new-customer",
+      "kb-profile-existing-customer",
+      "kb-region-huazhong",
+      "kb-region-huadong",
+      "kb-region-huanan",
+      "kb-channel-zhuan-gong",
+      "kb-channel-normal",
+      "kb-device-oc-a100",
+      "kb-device-oc-a200",
+      "kb-device-oc-pro300",
+      "kb-device-oc-mini110",
+      "kb-device-oc-edge500",
+      "kb-device-oc-lite210",
+      "kb-batch-0",
+      "kb-batch-1",
+      "kb-batch-2",
+      "kb-batch-3",
+      "kb-batch-4",
+      "kb-batch-5",
+      "kb-map-华中-专供",
+      "kb-map-华中-普通版",
+      "kb-map-华东-专供",
+      "kb-map-华东-普通版",
+      "kb-map-华南-专供",
+      "kb-map-华南-普通版"
+    ]
+  },
+  "ticketToolResult": null,
+  "handoffToolResult": null
+}
+
+========== TURN 2 ==========
+{
+  "llm": {
+    "mode": "mock",
+    "model": "heuristic-mock-support-llm",
+    "configuredFromEnv": false
+  },
+  "ingress": {
+    "channel": "terminal",
+    "conversationId": "conv-full-chain-001",
+    "senderId": "user-full-001",
+    "senderName": "测试用户",
+    "messageId": "msg-full-2",
+    "text": "请帮我新建一个工单，设备总是离线。"
+  },
+  "adaptedSession": {
+    "sessionId": "conv-full-chain-001",
+    "customerId": "cust-full-001",
+    "latestUserMessage": "请帮我新建一个工单，设备总是离线。",
+    "historyCount": 3,
+    "ticketId": "TK-20260416-01"
+  },
+  "sessionStore": {
+    "storeDir": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR",
+    "sessionFilePath": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR/conv-full-chain-001.json",
+    "transcriptCount": 4
+  },
+  "ticketTools": {
+    "backend": "bash",
+    "databasePath": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR/tickets.sqlite"
+  },
+  "routeDecision": {
+    "route": "tickets",
+    "intent": "create_ticket",
+    "confidence": 0.91,
+    "reason": "The user is asking about a case workflow or ticket handling.",
+    "entities": {}
+  },
+  "downstreamRoute": "tickets",
+  "downstreamReply": "我已经为你创建工单 TK-20260416-01，当前状态是已受理。我会继续帮你跟进。",
+  "knowledgeContextResult": null,
+  "ticketToolResult": {
+    "action": "create",
+    "ticketState": {
+      "ticketId": "TK-20260416-01",
+      "status": "open",
+      "priority": "medium",
+      "summary": "请帮我新建一个工单，设备总是离线。",
+      "lastUpdateAt": "2026-04-16T09:00:59Z"
+    }
+  },
+  "handoffToolResult": null
+}
+
+========== TURN 3 ==========
+{
+  "llm": {
+    "mode": "mock",
+    "model": "heuristic-mock-support-llm",
+    "configuredFromEnv": false
+  },
+  "ingress": {
+    "channel": "terminal",
+    "conversationId": "conv-full-chain-001",
+    "senderId": "user-full-001",
+    "senderName": "测试用户",
+    "messageId": "msg-full-3",
+    "text": "请更新这个工单，优先级提高，状态改为处理中。"
+  },
+  "adaptedSession": {
+    "sessionId": "conv-full-chain-001",
+    "customerId": "cust-full-001",
+    "latestUserMessage": "请更新这个工单，优先级提高，状态改为处理中。",
+    "historyCount": 5,
+    "ticketId": "TK-20260416-01"
+  },
+  "sessionStore": {
+    "storeDir": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR",
+    "sessionFilePath": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR/conv-full-chain-001.json",
+    "transcriptCount": 6
+  },
+  "ticketTools": {
+    "backend": "bash",
+    "databasePath": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR/tickets.sqlite"
+  },
+  "routeDecision": {
+    "route": "tickets",
+    "intent": "check_ticket_progress",
+    "confidence": 0.91,
+    "reason": "The user is asking about a case workflow or ticket handling.",
+    "entities": {}
+  },
+  "downstreamRoute": "tickets",
+  "downstreamReply": "我已经更新工单 TK-20260416-01，当前状态是处理中。如有新进展我会继续同步给你。",
+  "knowledgeContextResult": null,
+  "ticketToolResult": {
+    "action": "update",
+    "ticketState": {
+      "ticketId": "TK-20260416-01",
+      "status": "pending",
+      "priority": "medium",
+      "summary": "请更新这个工单，优先级提高，状态改为处理中。",
+      "lastUpdateAt": "2026-04-16T09:00:59Z"
+    }
+  },
+  "handoffToolResult": null
+}
+
+========== TURN 4 ==========
+{
+  "llm": {
+    "mode": "mock",
+    "model": "heuristic-mock-support-llm",
+    "configuredFromEnv": false
+  },
+  "ingress": {
+    "channel": "terminal",
+    "conversationId": "conv-full-chain-001",
+    "senderId": "user-full-001",
+    "senderName": "测试用户",
+    "messageId": "msg-full-4",
+    "text": "现在就给我转人工，我要投诉并升级。"
+  },
+  "adaptedSession": {
+    "sessionId": "conv-full-chain-001",
+    "customerId": "cust-full-001",
+    "latestUserMessage": "现在就给我转人工，我要投诉并升级。",
+    "historyCount": 7,
+    "ticketId": "TK-20260416-01"
+  },
+  "sessionStore": {
+    "storeDir": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR",
+    "sessionFilePath": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR/conv-full-chain-001.json",
+    "transcriptCount": 8
+  },
+  "ticketTools": {
+    "backend": "bash",
+    "databasePath": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR/tickets.sqlite"
+  },
+  "routeDecision": {
+    "route": "handoff",
+    "intent": "escalate_to_human",
+    "confidence": 0.95,
+    "reason": "The user explicitly asks for a human handoff or urgent escalation.",
+    "entities": {}
+  },
+  "downstreamRoute": "handoff",
+  "downstreamReply": "我已经为你整理好情况，并转交人工继续处理。",
+  "knowledgeContextResult": null,
+  "ticketToolResult": null,
+  "handoffToolResult": {
+    "queueId": "handoff-20260416",
+    "acceptedAt": "2026-04-16T09:00:59.703Z",
+    "urgency": "urgent",
+    "consoleView": "=== Human Handoff View ===\nQueue ID: handoff-20260416\nAccepted At: 2026-04-16T09:00:59.703Z\nUrgency: urgent\nCustomer ID: cust-full-001\nSession ID: conv-full-chain-001\n\nLatest Customer Message\n现在就给我转人工，我要投诉并升级。\n\nHandoff Reason\nThe user explicitly asks for escalation or the issue appears urgent.\n\nSummary For Human\n客户反馈：现在就给我转人工，我要投诉并升级。\n\nService Route Decision\nRoute: handoff\nIntent: escalate_to_human\nConfidence: 0.95\nReason: The user explicitly asks for a human handoff or urgent escalation.\nEntities: {}\n\nCurrent Ticket State\nTicket ID: TK-20260416-01\nStatus: pending\nPriority: medium\nSummary: 请更新这个工单，优先级提高，状态改为处理中。\nLast Update: 2026-04-16T09:00:59Z\n\nShared Business Context\nCustomer Tier: standard\nChannel: terminal\nRealtime Handoff: true\nIn Business Hours: unknown\n\nRecent Conversation\n1. [user] 我是新客户，这个设备第一次怎么配置？\n2. [assistant] 根据当前准备好的知识，我建议先围绕“我是新客户，这个设备第一次怎么配置？”给出标准说明，并在需要时继续分流到工单或人工。\n3. [user] 请帮我新建一个工单，设备总是离线。\n4. [assistant] 我已经为你创建工单 TK-20260416-01，当前状态是已受理。我会继续帮你跟进。\n5. [user] 请更新这个工单，优先级提高，状态改为处理中。\n6. [assistant] 我已经更新工单 TK-20260416-01，当前状态是处理中。如有新进展我会继续同步给你。\n\nKnowledge Signals\n1. 客服助手能力说明 [kb-general-01]\n2. 退款处理时效说明 [kb-refund-01]\n3. 工单处理说明 [kb-ticket-01]\n\nAttachment Payload\nsource=mock-runtime;topic=handoff"
+  }
+}
+
+STORE_DIR=/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR
+SESSION_FILE=/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR/conv-full-chain-001.json
+DB_PATH=/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR/tickets.sqlite

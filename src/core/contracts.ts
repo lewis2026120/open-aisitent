@@ -8,6 +8,12 @@ export type CustomerTier = "standard" | "vip" | "enterprise";
 
 export type RiskLevel = "low" | "medium" | "high";
 
+export type CustomerPersona = "new_customer" | "existing_customer";
+
+export type SupportRegion = "华中" | "华东" | "华南";
+
+export type ChannelEdition = "专供" | "普通版";
+
 export interface CustomerProfile {
   customerId: string;
   tier?: CustomerTier;
@@ -15,6 +21,11 @@ export interface CustomerProfile {
   product?: string;
   tags?: string[];
   riskLevel?: RiskLevel;
+  persona?: CustomerPersona;
+  deviceModel?: string;
+  region?: SupportRegion;
+  batch?: 0 | 1 | 2 | 3 | 4 | 5;
+  channelEdition?: ChannelEdition;
 }
 
 export interface BusinessPolicyContext {

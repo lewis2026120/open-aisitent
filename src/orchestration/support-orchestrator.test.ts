@@ -140,11 +140,13 @@ describe("SupportOrchestrator", () => {
               },
             },
             rawOutput: "{}",
+            rawCycleOutputs: ["{}"],
             latestTicketState: ticketsScenario.session.ticketState ?? null,
             toolResult: {
               action: "query",
               ticketState: ticketsScenario.session.ticketState ?? null,
             },
+            toolCycles: [],
           };
         },
       },
@@ -201,11 +203,13 @@ describe("SupportOrchestrator", () => {
             },
           },
           rawOutput: "{}",
+          rawCycleOutputs: ["{}"],
           latestTicketState: null,
           toolResult: {
             action: "query",
             ticketState: null,
           },
+          toolCycles: [],
         }),
       },
       handoffAgent: {

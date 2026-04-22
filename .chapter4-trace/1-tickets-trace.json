@@ -1,0 +1,45 @@
+{
+  "llm": {
+    "mode": "mock",
+    "model": "heuristic-mock-support-llm",
+    "configuredFromEnv": false
+  },
+  "ingress": {
+    "channel": "wechat",
+    "conversationId": "trace-tickets-001",
+    "senderId": "sender-001",
+    "senderName": "张三",
+    "messageId": "msg-tickets-001",
+    "text": "我的工单进展到哪里了？"
+  },
+  "adaptedSession": {
+    "sessionId": "trace-tickets-001",
+    "customerId": "cust-tickets-demo",
+    "latestUserMessage": "我的工单进展到哪里了？",
+    "historyCount": 1
+  },
+  "sessionStore": {
+    "storeDir": "/Users/senwei/Downloads/open-asisitent-claw-my/.chapter4-trace/tickets-store",
+    "sessionFilePath": "/Users/senwei/Downloads/open-asisitent-claw-my/.chapter4-trace/tickets-store/trace-tickets-001.json",
+    "transcriptCount": 2
+  },
+  "ticketTools": {
+    "backend": "native",
+    "databasePath": "/Users/senwei/Downloads/open-asisitent-claw-my/.chapter4-trace/tickets-store/tickets.sqlite"
+  },
+  "routeDecision": {
+    "route": "tickets",
+    "intent": "check_ticket_progress",
+    "confidence": 0.91,
+    "reason": "The user is asking about a case workflow or ticket handling.",
+    "entities": {}
+  },
+  "downstreamRoute": "tickets",
+  "downstreamReply": "我可以帮你查询订单或工单的处理进度，但当前还缺少可定位的记录。请提供订单号、工单号，或更具体的下单信息。",
+  "knowledgeContextResult": null,
+  "ticketToolResult": {
+    "action": "query",
+    "ticketState": null
+  },
+  "handoffToolResult": null
+}

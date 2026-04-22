@@ -64,6 +64,25 @@ export function buildClassificationExamplesSection(
   });
 }
 
+export function buildRouteEvidenceSection(
+  examples: ClassificationExample[],
+): PromptSection | null {
+  if (examples.length === 0) {
+    return null;
+  }
+
+  return buildTextSection({
+    key: "route-evidence",
+    title: "Route Evidence Library",
+    lines: examples.flatMap((example, index) => [
+      `${index + 1}. Route=${example.route}; Intent=${example.intent}`,
+      `   Case: ${example.example}`,
+      ...(example.reason ? [`   Evidence: ${example.reason}`] : []),
+    ]),
+    required: false,
+  });
+}
+
 export function buildHistorySection(
   history: ConversationTurn[],
   options: { maxTurns?: number } = {},
@@ -163,6 +182,9 @@ export function buildSharedContextSection(
   if (sharedContext.customerProfile) {
     lines.push(`Customer id: ${sharedContext.customerProfile.customerId}`);
     lines.push(`Customer tier: ${sharedContext.customerProfile.tier ?? "standard"}`);
+    if (sharedContext.customerProfile.persona) {
+      lines.push(`Customer persona: ${sharedContext.customerProfile.persona}`);
+    }
     if (sharedContext.customerProfile.locale) {
       lines.push(`Locale: ${sharedContext.customerProfile.locale}`);
     }
@@ -171,6 +193,18 @@ export function buildSharedContextSection(
     }
     if (sharedContext.customerProfile.riskLevel) {
       lines.push(`Risk level: ${sharedContext.customerProfile.riskLevel}`);
+    }
+    if (sharedContext.customerProfile.deviceModel) {
+      lines.push(`Device model: ${sharedContext.customerProfile.deviceModel}`);
+    }
+    if (sharedContext.customerProfile.region) {
+      lines.push(`Region: ${sharedContext.customerProfile.region}`);
+    }
+    if (sharedContext.customerProfile.batch !== undefined) {
+      lines.push(`Batch: ${sharedContext.customerProfile.batch}`);
+    }
+    if (sharedContext.customerProfile.channelEdition) {
+      lines.push(`Channel edition: ${sharedContext.customerProfile.channelEdition}`);
     }
     if (sharedContext.customerProfile.tags?.length) {
       lines.push(`Customer tags: ${sharedContext.customerProfile.tags.join(", ")}`);

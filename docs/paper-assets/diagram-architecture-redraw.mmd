@@ -1,0 +1,21 @@
+flowchart TB
+  classDef node fill:#ffffff,stroke:#000000,stroke-width:1px,color:#000000;
+  linkStyle default stroke:#000000,stroke-width:1px;
+
+  U[User / Channel\n用户 / 渠道] --> M[Message Factory\n消息工厂\ncreateRuntimeBusinessMessage]
+  M --> S[SessionStore\n会话存储\nrecordBusinessMessage]
+  S --> G[Gateway\n网关\nContext Injection + Prompt Build]
+  G --> O[SupportOrchestrator\n支持编排器\nRoute First]
+  O --> SA[ServiceAgent\n服务代理\nroute decision]
+  SA --> KA[KnowledgeAgent\n知识代理]
+  SA --> TA[TicketsAgent ReAct Loop\n工单代理 ReAct 循环]
+  SA --> HA[HandoffToHumanAgent\n人工转接代理]
+  TA --> TT[TicketTools\n工单工具\nNative or Bash+SQL]
+  HA --> HT[HandoffTools\n转接工具]
+  KA --> R[Reply + Trace\n回复 + 追踪]
+  TT --> R
+  HT --> R
+  R --> W[appendAssistantReply / updateTicketState\n追加助手回复 / 更新工单状态]
+  W --> S
+
+  class U,M,S,G,O,SA,KA,TA,HA,TT,HT,R,W node;

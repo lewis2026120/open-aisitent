@@ -1,0 +1,64 @@
+{
+  "sessionId": "cli-session-1776864736862-py8hbv",
+  "customerId": "cust-cli-1776864736862-5b1w1k",
+  "channel": "terminal",
+  "senderId": "cli-user-001",
+  "senderName": "CLI User",
+  "transcript": [
+    {
+      "id": "msg-1776864736875-1",
+      "role": "user",
+      "text": "你们企业都有什么服务？",
+      "createdAt": "2026-04-22T13:32:16.872Z"
+    },
+    {
+      "id": "assistant-1776864736883",
+      "role": "assistant",
+      "text": "我们当前提供 3 类企业服务：1) 标准运维包（含远程诊断、工作日技术支持）；2) 专业保障包（含7x12支持、季度巡检、优先工单）；3) 旗舰托管包（含7x24支持、专属技术经理、重大故障绿色通道）。如果你告诉我公司规模和并发量，我可以直接给你推荐最合适的一档。",
+      "createdAt": "2026-04-22T13:32:16.883Z"
+    },
+    {
+      "id": "msg-1776864736883-2",
+      "role": "user",
+      "text": "哪个性价比最高？",
+      "createdAt": "2026-04-22T13:32:16.883Z"
+    },
+    {
+      "id": "assistant-1776864736885",
+      "role": "assistant",
+      "text": "按多数中小企业场景，专业保障包通常性价比最高：参考价约 1299 元/月，覆盖高频故障与升级支持；标准运维包约 699 元/月，适合低并发团队；旗舰托管包约 2999 元/月，适合强 SLA 场景。若你们月活设备超过 200 台，建议直接上专业保障包。",
+      "createdAt": "2026-04-22T13:32:16.885Z"
+    },
+    {
+      "id": "msg-1776864736886-3",
+      "role": "user",
+      "text": "办理需要多久？",
+      "createdAt": "2026-04-22T13:32:16.886Z"
+    },
+    {
+      "id": "assistant-1776864736886",
+      "role": "assistant",
+      "text": "办理时长通常分三档：标准运维包 10 到 30 分钟内生效；专业保障包 2 到 4 小时完成权限与策略下发；旗舰托管包 1 个工作日内完成专属通道配置。资料齐全时，大多数客户可在当天完成开通。",
+      "createdAt": "2026-04-22T13:32:16.886Z"
+    }
+  ],
+  "sharedContext": {
+    "channelCapabilities": {
+      "channel": "terminal",
+      "supportsAttachments": true,
+      "supportsRealtimeHandoff": true,
+      "supportsRichText": true,
+      "supportsButtons": false
+    },
+    "customerProfile": {
+      "customerId": "cust-cli-1776864736862-5b1w1k"
+    },
+    "operational": {
+      "handoffEnabled": true,
+      "ticketingEnabled": true,
+      "knowledgeEnabled": true
+    }
+  },
+  "createdAt": "2026-04-22T13:32:16.872Z",
+  "updatedAt": "2026-04-22T13:32:16.886Z"
+}

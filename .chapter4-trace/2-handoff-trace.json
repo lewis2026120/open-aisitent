@@ -1,0 +1,47 @@
+{
+  "llm": {
+    "mode": "mock",
+    "model": "heuristic-mock-support-llm",
+    "configuredFromEnv": false
+  },
+  "ingress": {
+    "channel": "telegram",
+    "conversationId": "trace-handoff-001",
+    "senderId": "sender-002",
+    "senderName": "李四",
+    "messageId": "msg-handoff-001",
+    "text": "我要投诉，已经等了三小时了！"
+  },
+  "adaptedSession": {
+    "sessionId": "trace-handoff-001",
+    "customerId": "cust-handoff-demo",
+    "latestUserMessage": "我要投诉，已经等了三小时了！",
+    "historyCount": 1
+  },
+  "sessionStore": {
+    "storeDir": "/Users/senwei/Downloads/open-asisitent-claw-my/.chapter4-trace/handoff-store",
+    "sessionFilePath": "/Users/senwei/Downloads/open-asisitent-claw-my/.chapter4-trace/handoff-store/trace-handoff-001.json",
+    "transcriptCount": 2
+  },
+  "ticketTools": {
+    "backend": "native",
+    "databasePath": "/Users/senwei/Downloads/open-asisitent-claw-my/.chapter4-trace/handoff-store/tickets.sqlite"
+  },
+  "routeDecision": {
+    "route": "handoff",
+    "intent": "escalate_to_human",
+    "confidence": 0.95,
+    "reason": "The user explicitly asks for a human handoff or urgent escalation.",
+    "entities": {}
+  },
+  "downstreamRoute": "handoff",
+  "downstreamReply": "我已经为你整理好情况，并转交人工继续处理。",
+  "knowledgeContextResult": null,
+  "ticketToolResult": null,
+  "handoffToolResult": {
+    "queueId": "handoff-20260421",
+    "acceptedAt": "2026-04-21T04:33:02.917Z",
+    "urgency": "urgent",
+    "consoleView": "=== Human Handoff View ===\nQueue ID: handoff-20260421\nAccepted At: 2026-04-21T04:33:02.917Z\nUrgency: urgent\nCustomer ID: cust-handoff-demo\nSession ID: trace-handoff-001\n\nLatest Customer Message\n我要投诉，已经等了三小时了！\n\nHandoff Reason\nThe user explicitly asks for escalation or the issue appears urgent.\n\nSummary For Human\n客户反馈：我要投诉，已经等了三小时了！\n\nService Route Decision\nRoute: handoff\nIntent: escalate_to_human\nConfidence: 0.95\nReason: The user explicitly asks for a human handoff or urgent escalation.\nEntities: {}\n\nCurrent Ticket State\nNo linked ticket.\n\nShared Business Context\nCustomer Tier: standard\nChannel: telegram\nRealtime Handoff: true\nIn Business Hours: unknown\n\nRecent Conversation\nNo earlier conversation history.\n\nKnowledge Signals\n1. 客服助手能力说明 [kb-general-01]\n2. 退款处理时效说明 [kb-refund-01]\n3. 工单处理说明 [kb-ticket-01]\n\nAttachment Payload\nsource=mock-runtime;topic=handoff"
+  }
+}

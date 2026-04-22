@@ -147,4 +147,56 @@ describe("TicketsAgent", () => {
 
     await expect(agent.run(ticketsScenario)).rejects.toBeInstanceOf(TicketsOutputParseError);
   });
+
+  it("supports a ReAct tool loop before final action", async () => {
+    let queryCalls = 0;
+    const outputs = [
+      JSON.stringify({
+        thought: "先查一下现有工单状态。",
+        toolCall: {
+          name: "ticketsQuery",
+          args: {
+            ticketId: "TK-20260307-01",
+          },
+        },
+      }),
+      JSON.stringify({
+        action: "query",
+        reason: "已有查询结果，直接返回进度。",
+        ticketFields: {
+          ticketId: "TK-20260307-01",
+        },
+        userReplyDraft: "我已经查到你的工单进度。",
+      }),
+    ];
+
+    const agent = createTicketsAgent({
+      ticketTools: new MockTicketTools(
+        () => {
+          queryCalls += 1;
+          return {
+            ticketId: "TK-20260307-01",
+            status: "pending",
+            priority: "high",
+            summary: "用户反馈退款迟迟未到账。",
+            lastUpdateAt: "2026-03-08T09:00:00Z",
+          };
+        },
+        () => {
+          throw new Error("create should not be called");
+        },
+        () => {
+          throw new Error("update should not be called");
+        },
+      ),
+      llmClient: new MockLlmClient(() => outputs.shift() ?? outputs[1]),
+    });
+
+    const result = await agent.run(ticketsScenario);
+
+    expect(result.plan.action).toBe("query");
+    expect(result.toolCycles).toHaveLength(1);
+    expect(result.toolCycles[0].toolName).toBe("ticketsQuery");
+    expect(queryCalls).toBeGreaterThanOrEqual(2);
+  });
 });

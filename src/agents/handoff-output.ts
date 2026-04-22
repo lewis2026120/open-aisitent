@@ -20,7 +20,7 @@ export function parseHandoffPlan(rawOutput: string): HandoffPlan {
     handoffReason: parseRequiredString(parsed.handoffReason, "handoffReason", normalizedRawOutput),
     urgency: parseUrgency(parsed.urgency, normalizedRawOutput),
     summaryForHuman: parseRequiredString(parsed.summaryForHuman, "summaryForHuman", normalizedRawOutput),
-    attachmentPayload: parseRequiredString(parsed.attachmentPayload, "attachmentPayload", normalizedRawOutput),
+    attachmentPayload: parseOptionalString(parsed.attachmentPayload, "attachmentPayload") || `source=handoff;timestamp=${new Date().toISOString()}`,
     userReplyDraft: parseRequiredString(parsed.userReplyDraft, "userReplyDraft", normalizedRawOutput),
   };
 }
@@ -71,6 +71,14 @@ function parseRequiredString(value: unknown, fieldName: string, rawOutput: strin
   }
 
   return value.trim();
+}
+
+function parseOptionalString(value: unknown, fieldName: string): string | null {
+  if (typeof value === "string" && value.trim().length > 0) {
+    return value.trim();
+  }
+
+  return null;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

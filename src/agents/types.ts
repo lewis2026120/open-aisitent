@@ -20,6 +20,16 @@ import type {
 import type { HandoffUploadResult, HandoffTools } from "../tools/handoff-tools.js";
 import type { TicketOperationResult, TicketTools } from "../tools/ticket-tools.js";
 
+export type TicketToolName = "ticketsQuery" | "ticketsCreate" | "ticketsUpdate";
+
+export interface TicketToolCycle {
+  step: number;
+  thought?: string;
+  toolName: TicketToolName;
+  toolArgs: Record<string, string>;
+  toolResult: TicketState | null;
+}
+
 export interface ServiceAgentDeps {
   sectionBuilder: SectionBuilder;
   llmClient: LlmClient;
@@ -112,8 +122,10 @@ export interface TicketsAgentResult {
   plan: TicketActionPlan;
   promptBundle: PromptBundle;
   rawOutput: string;
+  rawCycleOutputs: string[];
   latestTicketState: TicketState | null;
   toolResult: TicketOperationResult;
+  toolCycles: TicketToolCycle[];
 }
 
 export interface HandoffAgentDeps {

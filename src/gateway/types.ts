@@ -1,13 +1,16 @@
 import type {
   BusinessPolicyContext,
+  ChannelEdition,
   ChannelCapabilityContext,
   ClassificationExample,
   ConversationSummary,
+  CustomerPersona,
   CustomerProfile,
   KnowledgeCandidate,
   KnowledgeContext,
   OperationalContext,
   SessionSnapshot,
+  SupportRegion,
   TaskGoal,
   TicketState,
   ToolSummary,
@@ -58,6 +61,11 @@ export interface GatewayBusinessMessageRequest {
   businessPolicyContext?: BusinessPolicyContext;
   channelCapabilityContext?: ChannelCapabilityContext;
   customerProfile?: CustomerProfile;
+  customerPersona?: CustomerPersona;
+  deviceModel?: string;
+  region?: SupportRegion;
+  batch?: 0 | 1 | 2 | 3 | 4 | 5 | number;
+  channelEdition?: ChannelEdition;
   operationalContext?: OperationalContext;
   conversationSummary?: ConversationSummary;
 }

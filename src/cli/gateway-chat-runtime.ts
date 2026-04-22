@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { AgentRoute } from "../core/contracts.js";
+import type { AgentRoute, ChannelEdition, CustomerPersona, SupportRegion } from "../core/contracts.js";
 import {
   createRuntimeBusinessMessage,
   type RuntimeSessionIdentity,
@@ -18,6 +18,11 @@ export interface GatewayChatRuntimeOptions {
   senderId?: string;
   customerId?: string;
   conversationId?: string;
+  customerPersona?: CustomerPersona;
+  deviceModel?: string;
+  region?: SupportRegion;
+  batch?: 0 | 1 | 2 | 3 | 4 | 5 | number;
+  channelEdition?: ChannelEdition;
   storeDir?: string;
   minimaxApiKey?: string;
   minimaxBaseUrl?: string;
@@ -56,6 +61,11 @@ interface GatewayChatSessionOptions {
   senderId?: string;
   customerId?: string;
   conversationId?: string;
+  customerPersona?: CustomerPersona;
+  deviceModel?: string;
+  region?: SupportRegion;
+  batch?: 0 | 1 | 2 | 3 | 4 | 5 | number;
+  channelEdition?: ChannelEdition;
   storeDir?: string;
   minimaxApiKey?: string;
   minimaxBaseUrl?: string;
@@ -106,7 +116,11 @@ export function createGatewayChatRuntime(
     },
 
     openNewSession(): GatewayChatSessionInfo {
-      sessionOptions = createSessionOptions(baseOptions, true);
+      const newBaseOptions = {
+        ...baseOptions,
+        customerId: `cust-cli-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      };
+      sessionOptions = createSessionOptions(newBaseOptions, true);
       turnNumber = 0;
       return toSessionInfo(sessionOptions);
     },
@@ -124,10 +138,15 @@ export function createGatewayChatRuntime(
 function createBaseSessionOptions(options: GatewayChatRuntimeOptions): GatewayChatSessionOptions {
   return {
     ...options,
-    customerId: options.customerId ?? "cust-cli-001",
+    customerId: options.customerId ?? `cust-cli-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     senderId: options.senderId ?? "cli-user-001",
     senderName: options.senderName ?? "CLI User",
     channel: options.channel ?? "terminal",
+    customerPersona: options.customerPersona,
+    deviceModel: options.deviceModel,
+    region: options.region,
+    batch: options.batch,
+    channelEdition: options.channelEdition,
     storeDir: options.storeDir ?? path.join(process.cwd(), ".support-session-store"),
   };
 }
@@ -165,6 +184,11 @@ function toSessionIdentity(options: GatewayChatSessionOptions): RuntimeSessionId
     senderId: options.senderId!,
     senderName: options.senderName,
     channel: options.channel!,
+    customerPersona: options.customerPersona,
+    deviceModel: options.deviceModel,
+    region: options.region,
+    batch: options.batch,
+    channelEdition: options.channelEdition,
   };
 }
 

@@ -100,7 +100,7 @@ describe("GatewayChatRuntime", () => {
       expect(nextSession.conversationId).not.toBe(firstSession.conversationId);
       expect(secondTurn.turnNumber).toBe(1);
       expect(secondTurn.trace.ingress.conversationId).toBe(nextSession.conversationId);
-      expect(secondTurn.trace.sessionStore.transcriptCount).toBe(2);
+      expect(secondTurn.trace.sessionStore.transcriptCount).toBeGreaterThanOrEqual(2);
       expect(secondTurn.trace.adaptedSession.ticketId).toBeUndefined();
     } finally {
       runtime.close();

@@ -1,0 +1,88 @@
+{
+  "sessionId": "cli-session-1776862393859-g1u53b",
+  "customerId": "cust-cli-001",
+  "channel": "terminal",
+  "senderId": "cli-user-001",
+  "senderName": "CLI User",
+  "transcript": [
+    {
+      "id": "mem-cli-session-1776861868098-sznm27-msg-1776861904723-2",
+      "role": "user",
+      "text": "我的产品为什么不能用了",
+      "createdAt": "2026-04-22T12:45:04.723Z"
+    },
+    {
+      "id": "mem-cli-session-1776861868098-sznm27-assistant-1776861927513",
+      "role": "assistant",
+      "text": "您好！关于 OC-A100 设备无法使用的问题，根据知识库信息，OC-A100 设备在首次激活阶段可能出现初始化失败的情况（特别如果您是第0或第1批次设备）。\n\n建议您尝试以下步骤：\n1. 长按电源键10秒强制重启\n2. 执行设备固件自检\n3. 检查电源适配器连接是否正常\n\n由于您之前已尝试上述方法并表示仍无法使用，且已提出换货需求，我将为您升级至人工客服处理换货事宜。请稍等，人工客服将尽快接入为您服务。",
+      "createdAt": "2026-04-22T12:45:27.512Z"
+    },
+    {
+      "id": "mem-cli-session-1776861868098-sznm27-msg-1776861995334-3",
+      "role": "user",
+      "text": "我的产品为什么还是不能用",
+      "createdAt": "2026-04-22T12:46:35.334Z"
+    },
+    {
+      "id": "mem-cli-session-1776861868098-sznm27-assistant-1776862015578",
+      "role": "assistant",
+      "text": "您好！非常抱歉您的设备问题尚未解决。我已为您升级至人工客服处理换货事宜，客服人员将尽快联系您为您安排换货。请留意我们的来电或消息，感谢您的耐心等待。",
+      "createdAt": "2026-04-22T12:46:55.577Z"
+    },
+    {
+      "id": "mem-cli-session-1776862118537-cz1ybj-mem-cli-session-1776861868098-sznm27-assistant-1776862015578",
+      "role": "assistant",
+      "text": "您好！非常抱歉您的设备问题尚未解决。我已为您升级至人工客服处理换货事宜，客服人员将尽快联系您为您安排换货。请留意我们的来电或消息，感谢您的耐心等待。",
+      "createdAt": "2026-04-22T12:46:55.577Z"
+    },
+    {
+      "id": "mem-cli-session-1776862118537-cz1ybj-msg-1776862129792-1",
+      "role": "user",
+      "text": "我买的产品不能用了",
+      "createdAt": "2026-04-22T12:48:49.789Z"
+    },
+    {
+      "id": "mem-cli-session-1776862118537-cz1ybj-msg-1776862165824-2",
+      "role": "user",
+      "text": "我买的产品不能用了",
+      "createdAt": "2026-04-22T12:49:25.824Z"
+    },
+    {
+      "id": "mem-cli-session-1776862118537-cz1ybj-msg-1776862203212-3",
+      "role": "user",
+      "text": "为什么我这个产品不能使用了",
+      "createdAt": "2026-04-22T12:50:03.209Z"
+    },
+    {
+      "id": "msg-1776862406576-1",
+      "role": "user",
+      "text": "为什么我的产品不能用了",
+      "createdAt": "2026-04-22T12:53:26.573Z"
+    },
+    {
+      "id": "assistant-1776862406600",
+      "role": "assistant",
+      "text": "根据当前准备好的知识，我建议先围绕“为什么我的产品不能用了”给出标准说明，并在需要时继续分流到工单或人工。",
+      "createdAt": "2026-04-22T12:53:26.599Z"
+    }
+  ],
+  "sharedContext": {
+    "channelCapabilities": {
+      "channel": "terminal",
+      "supportsAttachments": true,
+      "supportsRealtimeHandoff": true,
+      "supportsRichText": true,
+      "supportsButtons": false
+    },
+    "customerProfile": {
+      "customerId": "cust-cli-001"
+    },
+    "operational": {
+      "handoffEnabled": true,
+      "ticketingEnabled": true,
+      "knowledgeEnabled": true
+    }
+  },
+  "createdAt": "2026-04-22T12:53:26.573Z",
+  "updatedAt": "2026-04-22T12:53:26.599Z"
+}

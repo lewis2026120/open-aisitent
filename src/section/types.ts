@@ -16,6 +16,7 @@ export type SectionKey =
   | "task-goal"
   | "current-message"
   | "classification-examples"
+  | "route-evidence"
   | "history"
   | "ticket-state"
   | "knowledge-candidates"
@@ -55,6 +56,7 @@ export interface BasePromptInput {
 
 export interface RoutePromptInput extends BasePromptInput {
   classificationExamples: ClassificationExample[];
+  routeEvidenceExamples?: ClassificationExample[];
   knowledgeCandidates?: KnowledgeCandidate[];
 }
 

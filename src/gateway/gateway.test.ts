@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import type { CustomerProfile } from "../core/contracts.js";
 import type { SupportOrchestratorResult } from "../orchestration/types.js";
 import {
   handoffScenario,
@@ -267,6 +268,7 @@ describe("Gateway", () => {
                   },
                 },
                 rawOutput: "{}",
+                rawCycleOutputs: ["{}"],
                 latestTicketState: {
                   ticketId: "TK-20260307-01",
                   status: "pending",
@@ -284,6 +286,7 @@ describe("Gateway", () => {
                     lastUpdateAt: "2026-03-10T09:30:00Z",
                   },
                 },
+                toolCycles: [],
               },
             },
           }),
@@ -321,6 +324,97 @@ describe("Gateway", () => {
       expect(result.reply).toContain("工单目前还在处理中");
       expect(result.session.history.some((turn) => turn.role === "assistant")).toBe(true);
       expect(stored?.transcript).toHaveLength(3);
+    } finally {
+      await fs.rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("injects persona/device/region/batch/channel context into route input", async () => {
+    let capturedProfile: CustomerProfile | undefined;
+    let capturedRouteEvidenceCount = 0;
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "open-assistant-gateway-inject-"));
+
+    try {
+      const gateway = createGateway({
+        config: gatewayConfig,
+        runner: {
+          run: async (input): Promise<SupportOrchestratorResult> => {
+            capturedProfile = input.routeInput.sharedContext?.customerProfile;
+            capturedRouteEvidenceCount = input.routeInput.routeEvidenceExamples?.length ?? 0;
+            return {
+              route: "knowledge",
+              routeResult: {
+                decision: {
+                  route: "knowledge",
+                  intent: "ask_refund_time",
+                  confidence: 0.9,
+                  reason: "knowledge answer",
+                  entities: {},
+                },
+                promptBundle: {
+                  variant: "route",
+                  sections: [],
+                  systemPrompt: "prompt",
+                  metadata: {
+                    sessionId: routeScenario.session.sessionId,
+                    historyCount: routeScenario.session.history.length,
+                    hasTicketState: true,
+                    knowledgeCandidateCount: routeScenario.knowledgeCandidates?.length ?? 0,
+                  },
+                },
+                rawOutput: "{}",
+              },
+              downstream: {
+                route: "knowledge",
+                finalReply: "好的，我来说明。",
+                result: {
+                  plan: {
+                    shouldAnswerDirectly: true,
+                    answerDraft: "好的，我来说明。",
+                    citedKnowledgeIds: ["kb-refund-01"],
+                  },
+                  promptBundle: {
+                    variant: "knowledge",
+                    sections: [],
+                    systemPrompt: "prompt",
+                    metadata: {
+                      sessionId: knowledgeScenario.session.sessionId,
+                      historyCount: knowledgeScenario.session.history.length,
+                      hasTicketState: true,
+                      knowledgeCandidateCount: knowledgeScenario.knowledgeCandidates.length,
+                    },
+                  },
+                  rawOutput: "{}",
+                  usedKnowledgeContext: knowledgeScenario.knowledgeContext ?? null,
+                },
+              },
+            };
+          },
+        },
+        sessionStore: createFileSessionStore(tempDir),
+      });
+
+      await gateway.handleBusinessMessage({
+        channel: "whatsapp",
+        conversationId: "conv-gateway-inject-001",
+        customerId: "cust-ctx-001",
+        senderId: "wx-ctx-001",
+        messageId: "msg-ctx-001",
+        text: "我是华东第2批次设备，最近频繁掉线。",
+        timestamp: "2026-03-10T10:00:00Z",
+        customerPersona: "new_customer",
+        deviceModel: "OC-PRO300",
+        region: "华东",
+        batch: 2,
+        channelEdition: "专供",
+      });
+
+      expect(capturedProfile?.persona).toBe("new_customer");
+      expect(capturedProfile?.deviceModel).toBe("OC-PRO300");
+      expect(capturedProfile?.region).toBe("华东");
+      expect(capturedProfile?.batch).toBe(2);
+      expect(capturedProfile?.channelEdition).toBe("专供");
+      expect(capturedRouteEvidenceCount).toBeGreaterThan(0);
     } finally {
       await fs.rm(tempDir, { recursive: true, force: true });
     }

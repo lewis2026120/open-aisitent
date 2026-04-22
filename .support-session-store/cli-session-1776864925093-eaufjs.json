@@ -1,0 +1,64 @@
+{
+  "sessionId": "cli-session-1776864925093-eaufjs",
+  "customerId": "cust-cli-1776864925093-la6r7y",
+  "channel": "terminal",
+  "senderId": "cli-user-001",
+  "senderName": "CLI User",
+  "transcript": [
+    {
+      "id": "msg-1776864926484-1",
+      "role": "user",
+      "text": "你们企业都有什么服务？",
+      "createdAt": "2026-04-22T13:35:26.481Z"
+    },
+    {
+      "id": "assistant-1776864926501",
+      "role": "assistant",
+      "text": "我们主要有三种服务：基础版、进阶版、旗舰版。基础版适合刚起步团队，进阶版适合大多数企业，旗舰版适合对稳定性要求很高的公司。你告诉我公司大概人数和设备量，我可以直接帮你选。",
+      "createdAt": "2026-04-22T13:35:26.500Z"
+    },
+    {
+      "id": "msg-1776864934881-2",
+      "role": "user",
+      "text": "哪个性价比最高？",
+      "createdAt": "2026-04-22T13:35:34.881Z"
+    },
+    {
+      "id": "assistant-1776864934886",
+      "role": "assistant",
+      "text": "一般来说，进阶版最划算。它的价格和功能比较平衡，常见问题基本都能覆盖。参考价格：基础版约 699 元/月，进阶版约 1299 元/月，旗舰版约 2999 元/月。大多数公司先选进阶版就够用。",
+      "createdAt": "2026-04-22T13:35:34.885Z"
+    },
+    {
+      "id": "msg-1776864940034-3",
+      "role": "user",
+      "text": "办理需要多久？",
+      "createdAt": "2026-04-22T13:35:40.034Z"
+    },
+    {
+      "id": "assistant-1776864940037",
+      "role": "assistant",
+      "text": "开通时间不长：基础版一般 10 到 30 分钟，进阶版一般 2 到 4 小时，旗舰版一般 1 个工作日。资料齐全的话，通常当天就能用上。",
+      "createdAt": "2026-04-22T13:35:40.037Z"
+    }
+  ],
+  "sharedContext": {
+    "channelCapabilities": {
+      "channel": "terminal",
+      "supportsAttachments": true,
+      "supportsRealtimeHandoff": true,
+      "supportsRichText": true,
+      "supportsButtons": false
+    },
+    "customerProfile": {
+      "customerId": "cust-cli-1776864925093-la6r7y"
+    },
+    "operational": {
+      "handoffEnabled": true,
+      "ticketingEnabled": true,
+      "knowledgeEnabled": true
+    }
+  },
+  "createdAt": "2026-04-22T13:35:26.481Z",
+  "updatedAt": "2026-04-22T13:35:40.037Z"
+}

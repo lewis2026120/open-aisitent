@@ -6,6 +6,7 @@ import type {
   SharedAgentContext,
 } from "../core/contracts.js";
 import { createDefaultKnowledgeContextLoader } from "../context/knowledge-context-loader.js";
+import { buildRouteEvidenceExamples } from "../context/route-evidence-library.js";
 import type { RoutePromptInput } from "../section/types.js";
 import type { SessionStore } from "../session/types.js";
 import type {
@@ -108,11 +109,17 @@ export function buildRouteInput(
   config: GatewayConfig,
   knowledgeCandidates: KnowledgeCandidate[],
 ): RoutePromptInput {
+  const routeEvidenceExamples = buildRouteEvidenceExamples({
+    latestUserMessage: session.latestUserMessage,
+    sharedContext: session.sharedContext,
+  });
+
   return {
     session,
     sharedContext: session.sharedContext,
     taskGoal: config.routeGoal,
-    classificationExamples: config.routeExamples,
+    classificationExamples: [...config.routeExamples, ...routeEvidenceExamples],
+    routeEvidenceExamples,
     knowledgeCandidates,
   };
 }
@@ -170,16 +177,25 @@ export function buildHandoffInput(
 }
 
 function buildSharedAgentContext(request: GatewayBusinessMessageRequest): SharedAgentContext {
+  const normalizedBatch = normalizeBatch(request.batch);
+  const baseProfile = request.customerProfile ?? {
+    customerId: request.customerId,
+  };
+
   return {
     businessPolicy: request.businessPolicyContext,
     channelCapabilities:
       request.channelCapabilityContext ??
       buildDefaultChannelCapabilities(request.channel),
-    customerProfile:
-      request.customerProfile ??
-      {
-        customerId: request.customerId,
-      },
+    customerProfile: {
+      ...baseProfile,
+      customerId: baseProfile.customerId ?? request.customerId,
+      persona: baseProfile.persona ?? request.customerPersona,
+      deviceModel: baseProfile.deviceModel ?? request.deviceModel,
+      region: baseProfile.region ?? request.region,
+      batch: baseProfile.batch ?? normalizedBatch,
+      channelEdition: baseProfile.channelEdition ?? request.channelEdition,
+    },
     operational:
       request.operationalContext ??
       {
@@ -189,6 +205,31 @@ function buildSharedAgentContext(request: GatewayBusinessMessageRequest): Shared
       },
     conversationSummary: request.conversationSummary,
   };
+}
+
+function normalizeBatch(value: GatewayBusinessMessageRequest["batch"]):
+  | 0
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | undefined {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) {
+    return undefined;
+  }
+
+  const integer = Math.trunc(numeric);
+  if (integer < 0 || integer > 5) {
+    return undefined;
+  }
+
+  return integer as 0 | 1 | 2 | 3 | 4 | 5;
 }
 
 function buildDefaultChannelCapabilities(channel: string) {

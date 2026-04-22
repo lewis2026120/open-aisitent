@@ -7,7 +7,9 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "demo:gateway": "tsx src/cli/gateway-demo.ts",
-    "chat:gateway": "tsx src/cli/gateway-chat.ts"
+    "chat:gateway": "tsx src/cli/gateway-chat.ts",
+    "bench:paper": "tsx src/benchmark/run-benchmarks.ts",
+    "demo:terminal-chain": "tsx src/benchmark/run-terminal-chain.ts"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

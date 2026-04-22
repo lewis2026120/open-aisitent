@@ -1,0 +1,155 @@
+{
+  "generatedAt": "2026-04-16T09:00:59.228Z",
+  "routeAccuracy": {
+    "full": {
+      "total": 22,
+      "correct": 20,
+      "accuracy": 0.9091,
+      "confusion": {
+        "knowledge": {
+          "knowledge": 8,
+          "tickets": 0,
+          "handoff": 0
+        },
+        "tickets": {
+          "knowledge": 2,
+          "tickets": 6,
+          "handoff": 0
+        },
+        "handoff": {
+          "knowledge": 0,
+          "tickets": 0,
+          "handoff": 6
+        }
+      },
+      "perClass": {
+        "knowledge": {
+          "precision": 0.8,
+          "recall": 1,
+          "f1": 0.8889
+        },
+        "tickets": {
+          "precision": 1,
+          "recall": 0.75,
+          "f1": 0.8571
+        },
+        "handoff": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        }
+      }
+    },
+    "ablationNoContextInjection": {
+      "total": 22,
+      "correct": 20,
+      "accuracy": 0.9091,
+      "confusion": {
+        "knowledge": {
+          "knowledge": 8,
+          "tickets": 0,
+          "handoff": 0
+        },
+        "tickets": {
+          "knowledge": 2,
+          "tickets": 6,
+          "handoff": 0
+        },
+        "handoff": {
+          "knowledge": 0,
+          "tickets": 0,
+          "handoff": 6
+        }
+      },
+      "perClass": {
+        "knowledge": {
+          "precision": 0.8,
+          "recall": 1,
+          "f1": 0.8889
+        },
+        "tickets": {
+          "precision": 1,
+          "recall": 0.75,
+          "f1": 0.8571
+        },
+        "handoff": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        }
+      }
+    }
+  },
+  "ticketExecution": {
+    "bash": {
+      "backend": "bash",
+      "totalOps": 24,
+      "successOps": 24,
+      "successRate": 1,
+      "byAction": {
+        "create": {
+          "total": 8,
+          "success": 8,
+          "rate": 1
+        },
+        "update": {
+          "total": 8,
+          "success": 8,
+          "rate": 1
+        },
+        "query": {
+          "total": 8,
+          "success": 8,
+          "rate": 1
+        }
+      }
+    },
+    "native": {
+      "backend": "native",
+      "totalOps": 24,
+      "successOps": 24,
+      "successRate": 1,
+      "byAction": {
+        "create": {
+          "total": 8,
+          "success": 8,
+          "rate": 1
+        },
+        "update": {
+          "total": 8,
+          "success": 8,
+          "rate": 1
+        },
+        "query": {
+          "total": 8,
+          "success": 8,
+          "rate": 1
+        }
+      }
+    }
+  },
+  "memoryWindowImpact": {
+    "window0": {
+      "name": "window0",
+      "factCoverage": 0,
+      "historicalTurnCount": 0,
+      "qualityScore": 0
+    },
+    "window2": {
+      "name": "window2",
+      "factCoverage": 0.4,
+      "historicalTurnCount": 2,
+      "qualityScore": 0.38
+    },
+    "window8": {
+      "name": "window8",
+      "factCoverage": 0.8,
+      "historicalTurnCount": 6,
+      "qualityScore": 0.86
+    },
+    "deltas": {
+      "window2Vs0": 0.38,
+      "window8Vs0": 0.86
+    }
+  }
+}

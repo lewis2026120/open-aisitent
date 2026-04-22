@@ -1,0 +1,33 @@
+sequenceDiagram
+  participant 用户 as User
+  participant 运行时 as SupportRuntime
+  participant 存储 as SessionStore
+  participant 网关 as Gateway
+  participant 编排 as Orchestrator
+  participant 服务代理 as ServiceAgent
+  participant 下游代理 as DownstreamAgent
+  participant 工具 as TicketOrHandoffTool
+
+  用户->>运行时: 发送业务消息
+  运行时->>存储: 记录业务消息
+  运行时->>网关: 处理（会话快照）
+  网关->>编排: 运行（路由输入 + 角色输入）
+  编排->>服务代理: 路由决策
+  服务代理-->>编排: 路由 + 意图 + 置信度
+  alt route=tickets
+    编排->>下游代理: TicketsAgent.run（ReAct）
+    下游代理->>工具: 创建 / 查询 / 更新
+    工具-->>下游代理: 观察（工单状态）
+    下游代理-->>编排: 最终回复 + 操作
+  else route=knowledge
+    编排->>下游代理: KnowledgeAgent.run
+    下游代理-->>编排: 知识回复
+  else route=handoff
+    编排->>下游代理: HandoffAgent.run
+    下游代理->>工具: 上传转接包
+    工具-->>下游代理: 队列ID + 控制台视图
+    下游代理-->>编排: 转接回复
+  end
+  编排-->>网关: 下游结果
+  网关->>存储: 追加助手回复 / 更新工单状态
+  运行时-->>用户: 最终回复 + 跟踪

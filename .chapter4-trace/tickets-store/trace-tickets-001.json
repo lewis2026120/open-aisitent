@@ -1,0 +1,41 @@
+{
+  "sessionId": "trace-tickets-001",
+  "customerId": "cust-tickets-demo",
+  "channel": "wechat",
+  "senderId": "sender-001",
+  "senderName": "张三",
+  "transcript": [
+    {
+      "id": "msg-tickets-001",
+      "role": "user",
+      "text": "我的工单进展到哪里了？",
+      "createdAt": "2026-04-21T04:33:02.901Z"
+    },
+    {
+      "id": "assistant-1776745982905",
+      "role": "assistant",
+      "text": "我可以帮你查询订单或工单的处理进度，但当前还缺少可定位的记录。请提供订单号、工单号，或更具体的下单信息。",
+      "createdAt": "2026-04-21T04:33:02.905Z"
+    }
+  ],
+  "sharedContext": {
+    "channelCapabilities": {
+      "channel": "wechat",
+      "supportsAttachments": true,
+      "supportsRealtimeHandoff": true,
+      "supportsRichText": true,
+      "supportsButtons": false
+    },
+    "customerProfile": {
+      "customerId": "cust-tickets-demo"
+    },
+    "operational": {
+      "handoffEnabled": true,
+      "ticketingEnabled": true,
+      "knowledgeEnabled": true
+    }
+  },
+  "createdAt": "2026-04-21T04:33:02.901Z",
+  "updatedAt": "2026-04-21T04:33:02.905Z",
+  "ticketState": null
+}

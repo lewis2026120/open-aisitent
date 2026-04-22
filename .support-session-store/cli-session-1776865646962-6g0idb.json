@@ -1,0 +1,52 @@
+{
+  "sessionId": "cli-session-1776865646962-6g0idb",
+  "customerId": "cust-cli-1776865646962-9gftuq",
+  "channel": "terminal",
+  "senderId": "cli-user-001",
+  "senderName": "CLI User",
+  "transcript": [
+    {
+      "id": "msg-1776865656739-1",
+      "role": "user",
+      "text": "你们这里有哪些服务？",
+      "createdAt": "2026-04-22T13:47:36.737Z"
+    },
+    {
+      "id": "assistant-1776865675058",
+      "role": "assistant",
+      "text": "您好！我们这里主要提供以下服务：\n\n**一、企业版服务**\n我们有三个版本的服务：\n- **基础版**：适合刚起步的团队\n- **进阶版**：适合大多数企业，功能和价格比较平衡（参考价约1299元/月）\n- **旗舰版**：适合对稳定性要求很高的公司（参考价约2999元/月）\n\n您可以告诉我公司大概的人数和设备量，我可以帮您推荐合适的版本。\n\n**二、客服助手服务**\n我这边可以帮您：\n- 回答常见的政策问题\n- 查询工单状态\n- 帮您创建或更新工单\n- 如有需要，也可以转接人工客服\n\n请问有什么我可以帮您的？",
+      "createdAt": "2026-04-22T13:47:55.055Z"
+    },
+    {
+      "id": "msg-1776866036071-2",
+      "role": "user",
+      "text": "你是一家哪个性价比最高",
+      "createdAt": "2026-04-22T13:53:56.071Z"
+    },
+    {
+      "id": "assistant-1776866042251",
+      "role": "assistant",
+      "text": "综合来看，**进阶版**性价比最高。它的价格（约 1299 元/月）和功能比较平衡，常见的企业需求基本都能覆盖，非常适合大多数公司选择。相比基础版（699 元/月）功能更全面，相比旗舰版（2999 元/月）价格更实惠。如果您公司规模较大或对稳定性要求特别高，也可以考虑旗舰版。请问您公司大概有多少人和设备？我可以帮您进一步推荐合适的版本。",
+      "createdAt": "2026-04-22T13:54:02.249Z"
+    }
+  ],
+  "sharedContext": {
+    "channelCapabilities": {
+      "channel": "terminal",
+      "supportsAttachments": true,
+      "supportsRealtimeHandoff": true,
+      "supportsRichText": true,
+      "supportsButtons": false
+    },
+    "customerProfile": {
+      "customerId": "cust-cli-1776865646962-9gftuq"
+    },
+    "operational": {
+      "handoffEnabled": true,
+      "ticketingEnabled": true,
+      "knowledgeEnabled": true
+    }
+  },
+  "createdAt": "2026-04-22T13:47:36.737Z",
+  "updatedAt": "2026-04-22T13:54:02.249Z"
+}

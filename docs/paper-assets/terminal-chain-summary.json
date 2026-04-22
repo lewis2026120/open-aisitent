@@ -1,0 +1,57 @@
+{
+  "turns": [
+    {
+      "turn": 1,
+      "message": "我是新客户，这个设备第一次怎么配置？",
+      "route": "knowledge",
+      "intent": "ask_policy_or_howto",
+      "confidence": 0.9,
+      "downstreamRoute": "knowledge",
+      "ticketAction": null,
+      "ticketId": null,
+      "handoffQueueId": null,
+      "transcriptCount": 2
+    },
+    {
+      "turn": 2,
+      "message": "请帮我新建一个工单，设备总是离线。",
+      "route": "tickets",
+      "intent": "create_ticket",
+      "confidence": 0.91,
+      "downstreamRoute": "tickets",
+      "ticketAction": "create",
+      "ticketId": "TK-20260416-01",
+      "handoffQueueId": null,
+      "transcriptCount": 4
+    },
+    {
+      "turn": 3,
+      "message": "请更新这个工单，优先级提高，状态改为处理中。",
+      "route": "tickets",
+      "intent": "check_ticket_progress",
+      "confidence": 0.91,
+      "downstreamRoute": "tickets",
+      "ticketAction": "update",
+      "ticketId": "TK-20260416-01",
+      "handoffQueueId": null,
+      "transcriptCount": 6
+    },
+    {
+      "turn": 4,
+      "message": "现在就给我转人工，我要投诉并升级。",
+      "route": "handoff",
+      "intent": "escalate_to_human",
+      "confidence": 0.95,
+      "downstreamRoute": "handoff",
+      "ticketAction": null,
+      "ticketId": "TK-20260416-01",
+      "handoffQueueId": "handoff-20260416",
+      "transcriptCount": 8
+    }
+  ],
+  "paths": {
+    "storeDir": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR",
+    "sessionFile": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR/conv-full-chain-001.json",
+    "dbPath": "/var/folders/b5/2tlly80d0s735vvhgrdlg_gw0000gn/T/openclaw-terminal-chain-8fbZGR/tickets.sqlite"
+  }
+}

@@ -1,0 +1,16 @@
+flowchart TB
+  U[用户 / 渠道] --> M[消息工厂\ncreateRuntimeBusinessMessage]
+  M --> S[会话存储\nrecordBusinessMessage]
+  S --> G[网关\n上下文注入 + 提示构建]
+  G --> O[支持编排器\n优先路由]
+  O --> SA[服务代理\n路由决策]
+  SA -->|knowledge| KA[知识代理]
+  SA -->|tickets| TA[工单代理 ReAct 循环]
+  SA -->|handoff| HA[人工转接代理]
+  TA --> TT[工单工具\n本地或 Bash+SQL]
+  HA --> HT[转接工具]
+  KA --> R[回复 + 跟踪]
+  TT --> R
+  HT --> R
+  R --> W[追加助手回复 / 更新工单状态]
+  W --> S

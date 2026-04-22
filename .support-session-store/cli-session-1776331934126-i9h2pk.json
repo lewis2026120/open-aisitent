@@ -1,0 +1,82 @@
+{
+  "sessionId": "cli-session-1776331934126-i9h2pk",
+  "customerId": "cust-cli-001",
+  "channel": "terminal",
+  "senderId": "cli-user-001",
+  "senderName": "CLI User",
+  "transcript": [
+    {
+      "id": "mem-cli-session-1773197374153-dg7lo5-msg-1773197377720-1",
+      "role": "user",
+      "text": "今天我的订单处理的如何",
+      "createdAt": "2026-03-11T02:49:37.718Z"
+    },
+    {
+      "id": "mem-cli-session-1773197374153-dg7lo5-assistant-1773197398955",
+      "role": "assistant",
+      "text": "我可以帮你查询订单或工单的处理进度，但当前还缺少可定位的记录。请提供订单号、工单号，或更具体的下单信息。",
+      "createdAt": "2026-03-11T02:49:58.954Z"
+    },
+    {
+      "id": "mem-cli-session-1773292594180-4ibm4d-msg-1773292596887-1",
+      "role": "user",
+      "text": "hi!",
+      "createdAt": "2026-03-12T05:16:36.885Z"
+    },
+    {
+      "id": "mem-cli-session-1773292594180-4ibm4d-assistant-1773292620549",
+      "role": "assistant",
+      "text": "您好！欢迎使用客服助手。我可以帮您：\n\n1. 解答常见政策问题\n2. 查询工单状态\n3. 帮助创建或更新工单\n4. 在需要时为您转接人工服务\n\n请问有什么可以帮到您的？",
+      "createdAt": "2026-03-12T05:17:00.547Z"
+    },
+    {
+      "id": "msg-1776331967655-1",
+      "role": "user",
+      "text": "我是新客户，这个设备第一次怎么配置",
+      "createdAt": "2026-04-16T09:32:47.653Z"
+    },
+    {
+      "id": "msg-1776331987247-2",
+      "role": "user",
+      "text": "我是新客户，这个设备第一次怎么配置",
+      "createdAt": "2026-04-16T09:33:07.247Z"
+    },
+    {
+      "id": "assistant-1776332033761",
+      "role": "assistant",
+      "text": "您好！欢迎成为我们的新客户。\n\n针对首次设备配置，一般有以下基础步骤：\n\n1. **设备通电与联网** - 将设备连接电源，并通过网线或WiFi接入网络\n2. **激活设备** - 在管理平台或App中添加设备，按指引完成首次绑定\n3. **基础参数设置** - 根据业务需求配置网络参数、告警阈值等\n4. **验证连通性** - 确认设备已正常上线并可执行基础操作\n\n为了给您更准确的配置指引，请问您使用的是哪款设备型号？这样我可以提供更具体的初始化步骤。",
+      "createdAt": "2026-04-16T09:33:53.759Z"
+    },
+    {
+      "id": "msg-1776332111579-3",
+      "role": "user",
+      "text": "我的设备总是离线怎么办",
+      "createdAt": "2026-04-16T09:35:11.578Z"
+    },
+    {
+      "id": "assistant-1776332148299",
+      "role": "assistant",
+      "text": "您好！设备离线问题，建议按以下步骤排查：\n\n1. **检查网络连接** - 确认网线是否松动，WiFi信号是否稳定，尝试重新插拔网线或切换网络\n2. **检查设备电源** - 确认设备指示灯状态是否正常\n3. **查看设备日志** - 通过管理平台或App查看设备离线前的状态记录\n4. **检查固件版本** - 确认是否为最新固件，必要时升级\n5. **重启设备** - 尝试重启设备看是否能恢复上线\n\n由于不同设备型号的排查重点略有差异，请问您使用的是哪款设备型号？这样我可以提供更针对性的解决方案。",
+      "createdAt": "2026-04-16T09:35:48.298Z"
+    }
+  ],
+  "sharedContext": {
+    "channelCapabilities": {
+      "channel": "terminal",
+      "supportsAttachments": true,
+      "supportsRealtimeHandoff": true,
+      "supportsRichText": true,
+      "supportsButtons": false
+    },
+    "customerProfile": {
+      "customerId": "cust-cli-001"
+    },
+    "operational": {
+      "handoffEnabled": true,
+      "ticketingEnabled": true,
+      "knowledgeEnabled": true
+    }
+  },
+  "createdAt": "2026-04-16T09:32:47.653Z",
+  "updatedAt": "2026-04-16T09:35:48.298Z"
+}
